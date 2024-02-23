@@ -4,17 +4,20 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { TokenProvider } from "../context/TokenContext";
 import SignIn from "./SignIn";
 import SignUp from "./SignUp";
+import { UserProvider } from "../context/UserContext";
 
 function App() {
   return (
     <DivApp>
       <TokenProvider>
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<SignIn />} />
-            <Route path="/signUp" element={<SignUp />} />
-          </Routes>
-        </BrowserRouter>
+        <UserProvider>
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<SignIn />} />
+              <Route path="/signUp" element={<SignUp />} />
+            </Routes>
+          </BrowserRouter>
+        </UserProvider>
       </TokenProvider>
     </DivApp>
   );
