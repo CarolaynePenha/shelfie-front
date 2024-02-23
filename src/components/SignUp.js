@@ -215,7 +215,7 @@ export default function SignUp() {
           {buttonLoading}
         </button>
       </Form>
-      <Link to={"/signUp"}>
+      <Link to={"/"}>
         <ButtonRegisterLogin disabled={buttonState}>
           <p>Não tem uma conta? Cadastre-se!</p>
         </ButtonRegisterLogin>

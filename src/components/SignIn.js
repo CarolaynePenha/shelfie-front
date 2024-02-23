@@ -2,6 +2,8 @@ import styled from "styled-components";
 import { useContext, useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
+import { Eye } from "lucide-react";
+import { EyeOff } from "lucide-react";
 
 import TokenContext from "../context/TokenContext";
 import Logo from "./../assets/logo.png";
@@ -15,6 +17,10 @@ export default function SignIn() {
   const { setToken } = useContext(TokenContext);
   const { user, setUser } = useContext(UserContext);
   const navigate = useNavigate();
+  const [type, setType] = useState({
+    passwordType: "password",
+    eyeType: "Eye",
+  });
 
   //   useEffect(() => {
   //     if (token) {
@@ -46,8 +52,18 @@ export default function SignIn() {
       alert("Usuário ou senha inválidos!");
     }
   }
+  function togglePasswordVisibility(passType) {
+    if (passType === "password") {
+      if (type.passwordType === "password") {
+        setType({ ...type, passwordType: "text", eyeType: "EyeOff" });
+      } else {
+        setType({ ...type, passwordType: "password", eyeType: "Eye" });
+      }
+    }
+  }
 
   const { email, password } = infosLogin;
+
   return (
     <Conteiner>
       <img src={Logo} alt="Logo" />
@@ -61,16 +77,34 @@ export default function SignIn() {
             setinfosLogin({ ...infosLogin, email: e.target.value })
           }
         />
-        <input
-          disabled={buttonState}
-          type="password"
-          required
-          placeholder="senha"
-          value={password}
-          onChange={(e) =>
-            setinfosLogin({ ...infosLogin, password: e.target.value })
-          }
-        />
+        <div className="div-password">
+          <input
+            disabled={buttonState}
+            type={type.passwordType}
+            required
+            placeholder="senha"
+            value={password}
+            onChange={(e) =>
+              setinfosLogin({ ...infosLogin, password: e.target.value })
+            }
+          />
+          {type.eyeType === "Eye" ? (
+            <Eye
+              onClick={() => togglePasswordVisibility("password")}
+              className="eye"
+              color="#574145"
+              size={25}
+            />
+          ) : (
+            <EyeOff
+              onClick={() => togglePasswordVisibility("password")}
+              className="eye"
+              color="#574145"
+              size={25}
+            />
+          )}
+        </div>
+
         <button disabled={buttonState} type="submit" className="save-button">
           {buttonLoading}
         </button>
