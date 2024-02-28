@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { Eye } from "lucide-react";
@@ -14,7 +14,7 @@ export default function SignIn() {
   const [infosLogin, setinfosLogin] = useState({ email: "", password: "" });
   const [buttonState, setButtonState] = useState(false);
   const [buttonLoading, setButtonLoading] = useState("Entrar");
-  const { setToken } = useContext(TokenContext);
+  const { token, setToken } = useContext(TokenContext);
   const { user, setUser } = useContext(UserContext);
   const navigate = useNavigate();
   const [type, setType] = useState({
@@ -22,11 +22,11 @@ export default function SignIn() {
     eyeType: "Eye",
   });
 
-  //   useEffect(() => {
-  //     if (token) {
-  //       navigate("/Shelf");
-  //     }
-  //   }, [token, navigate]);
+  useEffect(() => {
+    if (token) {
+      navigate("/shelf");
+    }
+  }, [token, navigate]);
 
   async function post(event) {
     event.preventDefault();
@@ -38,18 +38,22 @@ export default function SignIn() {
       setToken(data.token);
       setUser({ ...user, name: data.name, image: data.image });
       const stringifyUser = JSON.stringify({
-        name: data.name,
+        name: data.userName,
         image: data.image,
       });
       localStorage.setItem("token", data.token);
       localStorage.setItem("user", stringifyUser);
 
-      navigate("/Shelf");
+      navigate("/shelf");
     } catch (err) {
       console.log(err.response);
       setButtonState(false);
       setButtonLoading("Entrar");
-      alert("Usuário ou senha inválidos!");
+      if (err.response.status === 401) {
+        alert("Usuário ou senha inválidos");
+      } else {
+        alert("Algo deu errado, tente novamente");
+      }
     }
   }
   function togglePasswordVisibility(passType) {

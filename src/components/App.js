@@ -5,6 +5,7 @@ import { TokenProvider } from "../context/TokenContext";
 import SignIn from "./SignIn";
 import SignUp from "./SignUp";
 import { UserProvider } from "../context/UserContext";
+import Shelf from "./Shelf";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
             <Routes>
               <Route path="/" element={<SignIn />} />
               <Route path="/signUp" element={<SignUp />} />
+              <Route path="/shelf" element={<Shelf />} />
             </Routes>
           </BrowserRouter>
         </UserProvider>

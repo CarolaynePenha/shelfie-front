@@ -41,7 +41,11 @@ export default function SignUp() {
       console.log(err.response);
       setButtonState(false);
       setButtonLoading("Enviar");
-      alert("Usuário ou senha inválidos!");
+      if (err.response.status === 409) {
+        alert("E-mail já existe!");
+      } else {
+        alert("Algo deu errado, tente novamente");
+      }
     }
   }
 
