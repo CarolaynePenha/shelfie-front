@@ -33,7 +33,6 @@ export default function Shelf() {
       try {
         const { data } = await axios.get(URL, config);
         setShelfBooks(data);
-        console.log("data: ", data);
       } catch (err) {
         console.log(err.response);
         if (err.response.status === 401) {
@@ -47,12 +46,20 @@ export default function Shelf() {
     getShelfBooks();
   }, [getShelfBooks]);
 
-  async function search(event) {
-    event.preventDefault();
-    console.log("filter: ", filter);
-    console.log("srcBar: ", srcBar);
-    const URL =
-      process.env.REACT_APP_API_URL + `/shelf?src=${srcBar}&filter=${filter}`;
+  async function search(e, status) {
+    e.preventDefault();
+    let URL;
+    if (status) {
+      if (status === "favorite") {
+        URL = process.env.REACT_APP_API_URL + `/shelf?filter=${status}`;
+      } else {
+        URL = process.env.REACT_APP_API_URL + `/shelf?src=${status}`;
+      }
+    } else {
+      URL =
+        process.env.REACT_APP_API_URL + `/shelf?src=${srcBar}&filter=${filter}`;
+    }
+
     setFilter("filtrar por:");
     setSrcBar("");
     const config = {

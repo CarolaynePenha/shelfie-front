@@ -47,16 +47,57 @@ export default function Header({
           size={25}
         />
         <BookOpenCheck
+          onClick={(e) => {
+            search(e, "done");
+          }}
           color="#00693e"
           fill="#00693e"
           fillOpacity={0.5}
           size={25}
         />
-        <BookOpen color="#f3b93f" fill="#f3b93f" fillOpacity={0.5} size={25} />
-        <BookDashed color="#175676" size={25} />
-        <BookOpen color="#df6d2f" fill="#df6d2f" fillOpacity={0.5} size={25} />
-        <BookDown color="#000000" fill="#000000" fillOpacity={0.5} size={25} />
-        <BookHeart color="#850606" fill="#850606" fillOpacity={0.5} size={25} />
+        <BookOpen
+          onClick={(e) => {
+            search(e, "reading");
+          }}
+          color="#f3b93f"
+          fill="#f3b93f"
+          fillOpacity={0.5}
+          size={25}
+        />
+        <BookDashed
+          onClick={(e) => {
+            search(e, "wish");
+          }}
+          color="#175676"
+          size={25}
+        />
+        <BookOpen
+          onClick={(e) => {
+            search(e, "rereading");
+          }}
+          color="#df6d2f"
+          fill="#df6d2f"
+          fillOpacity={0.5}
+          size={25}
+        />
+        <BookDown
+          onClick={(e) => {
+            search(e, "abandoned");
+          }}
+          color="#000000"
+          fill="#000000"
+          fillOpacity={0.5}
+          size={25}
+        />
+        <BookHeart
+          onClick={(e) => {
+            search(e, "favorite");
+          }}
+          color="#850606"
+          fill="#850606"
+          fillOpacity={0.5}
+          size={25}
+        />
       </div>
     </DivHeader>
   );
