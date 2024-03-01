@@ -86,7 +86,7 @@ export default function Shelf() {
         setGetShelfBooks={setGetShelfBooks}
         getShelfBooks={getShelfBooks}
       />
-      <Conteiner>
+      <Container>
         <select
           required
           value={filter}
@@ -124,14 +124,14 @@ export default function Shelf() {
               return <Bookshelf key={index} shelfBook={shelfBook} />;
             })}
         </div>
-      </Conteiner>
+      </Container>
       <Footer />
     </>
   );
 }
 
 // ----------------------css
-const Conteiner = styled.section`
+const Container = styled.section`
   width: 100%;
   height: fit-content;
   display: flex;

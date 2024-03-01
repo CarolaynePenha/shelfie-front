@@ -69,7 +69,7 @@ export default function SignIn() {
   const { email, password } = infosLogin;
 
   return (
-    <Conteiner>
+    <Container>
       <img src={Logo} alt="Logo" />
       <Form onSubmit={post}>
         <input
@@ -118,12 +118,12 @@ export default function SignIn() {
           <p>Não tem uma conta? Cadastre-se!</p>
         </ButtonRegisterLogin>
       </Link>
-    </Conteiner>
+    </Container>
   );
 }
 
 // -------------------------------------css
-export const Conteiner = styled.div`
+export const Container = styled.div`
   width: 100%;
   height: fit-content;
   min-height: 100vh;

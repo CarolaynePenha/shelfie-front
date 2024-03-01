@@ -7,7 +7,7 @@ import { EyeOff } from "lucide-react";
 
 import Logo from "./../assets/logo.png";
 import Loading from "./Loading";
-import { ButtonRegisterLogin, Conteiner, Form } from "./SignIn";
+import { ButtonRegisterLogin, Container, Form } from "./SignIn";
 
 export default function SignUp() {
   const [infosSignUp, setInfosSignUp] = useState({
@@ -113,7 +113,7 @@ export default function SignUp() {
   const { email, password, repeatPassword, name, image } = infosSignUp;
 
   return (
-    <Conteiner>
+    <Container>
       <img src={Logo} alt="Logo" />
       <Form
         onSubmit={releaseFormSubmission}
@@ -224,7 +224,7 @@ export default function SignUp() {
           <p>Não tem uma conta? Cadastre-se!</p>
         </ButtonRegisterLogin>
       </Link>
-    </Conteiner>
+    </Container>
   );
 }
 

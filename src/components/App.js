@@ -6,6 +6,10 @@ import SignIn from "./SignIn";
 import SignUp from "./SignUp";
 import { UserProvider } from "../context/UserContext";
 import Shelf from "./Shelf";
+import Release from "./Release";
+import Search from "./Search";
+import Ranking from "./Ranking";
+import Profile from "./Profile";
 
 function App() {
   return (
@@ -17,6 +21,10 @@ function App() {
               <Route path="/" element={<SignIn />} />
               <Route path="/signUp" element={<SignUp />} />
               <Route path="/shelf" element={<Shelf />} />
+              <Route path="/release" element={<Release />} />
+              <Route path="/search" element={<Search />} />
+              <Route path="/ranking" element={<Ranking />} />
+              <Route path="/profile" element={<Profile />} />
             </Routes>
           </BrowserRouter>
         </UserProvider>

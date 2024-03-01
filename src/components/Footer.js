@@ -1,13 +1,56 @@
 import styled from "styled-components";
-import { Home, Rocket, Search, Trophy } from "lucide-react";
+import { BookUser, Home, Rocket, Search, Trophy } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 export default function Footer() {
+  const navigate = useNavigate();
   return (
     <DivFooter>
-      <Home color="#574145" fill="#574145" fillOpacity={0.5} size={25} />
-      <Rocket color="#574145" fill="#574145" fillOpacity={0.5} size={25} />
-      <Search color="#574145" fill="#574145" fillOpacity={0.5} size={25} />
-      <Trophy color="#574145" fill="#574145" fillOpacity={0.5} size={25} />
+      <Home
+        onClick={() => {
+          navigate("/shelf");
+        }}
+        color="#574145"
+        fill="#574145"
+        fillOpacity={0.5}
+        size={25}
+      />
+      <Rocket
+        onClick={() => {
+          navigate("/release");
+        }}
+        color="#574145"
+        fill="#574145"
+        fillOpacity={0.5}
+        size={25}
+      />
+      <Search
+        onClick={() => {
+          navigate("/search");
+        }}
+        color="#574145"
+        fill="#574145"
+        fillOpacity={0.5}
+        size={25}
+      />
+      <Trophy
+        onClick={() => {
+          navigate("/ranking");
+        }}
+        color="#574145"
+        fill="#574145"
+        fillOpacity={0.5}
+        size={25}
+      />
+      <BookUser
+        onClick={() => {
+          navigate("/profile");
+        }}
+        color="#574145"
+        fill="#574145"
+        fillOpacity={0.5}
+        size={25}
+      />
     </DivFooter>
   );
 }
