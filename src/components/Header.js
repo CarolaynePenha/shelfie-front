@@ -8,7 +8,13 @@ import { BookOpenCheck } from "lucide-react";
 
 import UserContext from "../context/UserContext";
 
-export default function Header({ search, setSrcBar }) {
+export default function Header({
+  search,
+  setSrcBar,
+  srcBar,
+  setGetShelfBooks,
+  getShelfBooks,
+}) {
   const { user } = useContext(UserContext);
 
   return (
@@ -22,8 +28,9 @@ export default function Header({ search, setSrcBar }) {
       <form onSubmit={search}>
         <div className="div-src">
           <input
-            className="debounce-input"
+            className="src-input"
             placeholder={"Buscar na minha estante"}
+            value={srcBar}
             onChange={(event) => setSrcBar(event.target.value)}
           />
           <button type="submit">
@@ -33,6 +40,7 @@ export default function Header({ search, setSrcBar }) {
       </form>
       <div className="book-marker">
         <BookMarked
+          onClick={() => setGetShelfBooks(!getShelfBooks)}
           color="#574145"
           fill="#574145"
           fillOpacity={0.5}
@@ -56,12 +64,17 @@ export default function Header({ search, setSrcBar }) {
 
 // ----------------------css
 const DivHeader = styled.div`
-  height: 18vh;
+  height: 19vh;
+  width: 100%;
   background-color: #fde8e9;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
+  border-bottom: 1px solid #5741457a;
+  position: fixed;
+  top: 0;
+  z-index: 2;
   .top-shelf {
     width: 100%;
     padding: 5px 15px;
@@ -79,7 +92,7 @@ const DivHeader = styled.div`
   form {
     width: 100%;
   }
-  .debounce-input {
+  .src-input {
     width: 70%;
     border: none;
     height: 30px;
@@ -97,7 +110,7 @@ const DivHeader = styled.div`
   .book-marker {
     width: 100%;
     margin: 10px 0px;
-    border-bottom: 1px solid #5741457a;
+
     border-top: 1px solid #5741457a;
     display: flex;
     justify-content: space-evenly;
