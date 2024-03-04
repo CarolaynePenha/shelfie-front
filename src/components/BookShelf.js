@@ -1,9 +1,10 @@
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 export default function Bookshelf({ shelfBook }) {
-  console.log("shelfBook: ", shelfBook);
+  const navigate = useNavigate();
   return shelfBook?.book ? (
-    <DivShelfBook>
+    <DivShelfBook onClick={() => navigate(`/bookInfos/${shelfBook.book.id}`)}>
       <img src={shelfBook.book.bookImage} alt="Capa do livro" />
     </DivShelfBook>
   ) : (

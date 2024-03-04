@@ -4,11 +4,18 @@ import { useNavigate } from "react-router-dom";
 
 export default function Footer() {
   const navigate = useNavigate();
+  const menu = {
+    shelf: "shelf",
+    release: "release",
+    search: "search",
+    ranking: "ranking",
+    profile: "profile",
+  };
   return (
     <DivFooter>
       <Home
         onClick={() => {
-          navigate("/shelf");
+          navigate(`/${menu.shelf}`);
         }}
         color="#574145"
         fill="#574145"
@@ -17,7 +24,7 @@ export default function Footer() {
       />
       <Rocket
         onClick={() => {
-          navigate("/release");
+          navigate(`/${menu.release}`);
         }}
         color="#574145"
         fill="#574145"
@@ -26,7 +33,7 @@ export default function Footer() {
       />
       <Search
         onClick={() => {
-          navigate("/search");
+          navigate(`/${menu.search}`);
         }}
         color="#574145"
         fill="#574145"
@@ -35,7 +42,7 @@ export default function Footer() {
       />
       <Trophy
         onClick={() => {
-          navigate("/ranking");
+          navigate(`/${menu.ranking}`);
         }}
         color="#574145"
         fill="#574145"
@@ -44,7 +51,7 @@ export default function Footer() {
       />
       <BookUser
         onClick={() => {
-          navigate("/profile");
+          navigate(`/${menu.profile}`);
         }}
         color="#574145"
         fill="#574145"

@@ -10,6 +10,7 @@ import Release from "./Release";
 import Search from "./Search";
 import Ranking from "./Ranking";
 import Profile from "./Profile";
+import BookInfos from "./BookInfos";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
               <Route path="/search" element={<Search />} />
               <Route path="/ranking" element={<Ranking />} />
               <Route path="/profile" element={<Profile />} />
+              <Route path="/bookInfos/:id" element={<BookInfos />} />
             </Routes>
           </BrowserRouter>
         </UserProvider>
