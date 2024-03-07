@@ -11,6 +11,7 @@ import Search from "./Search";
 import Ranking from "./Ranking";
 import Profile from "./Profile";
 import BookInfos from "./BookInfos";
+import AddBookInShelf from "./AddBookInShelf";
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
               <Route path="/ranking" element={<Ranking />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/bookInfos/:id" element={<BookInfos />} />
+              <Route path="/addBook/:id" element={<AddBookInShelf />} />
             </Routes>
           </BrowserRouter>
         </UserProvider>

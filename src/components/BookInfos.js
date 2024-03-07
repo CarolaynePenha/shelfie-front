@@ -17,7 +17,7 @@ export default function BookInfos() {
   const { setUser } = useContext(UserContext);
 
   useEffect(() => {
-    async function getShelfBooks() {
+    async function getfBookById() {
       const URL = process.env.REACT_APP_API_URL + `/book/${id}`;
       const config = {
         headers: {
@@ -41,7 +41,7 @@ export default function BookInfos() {
         }
       }
     }
-    getShelfBooks();
+    getfBookById();
   }, []);
   return (
     <>
@@ -50,7 +50,7 @@ export default function BookInfos() {
           <Undo2 onClick={() => navigate(-1)} color="#574145" size={25} />
         </div>
         <section className="div-img">
-          <img src={book.bookImage} />
+          <img src={book.bookImage} alt="capa do livro" />
           <Plus className="plus" color="#574145" size={40} />
           <div className="book-infos">
             <strong>{book.title}</strong>

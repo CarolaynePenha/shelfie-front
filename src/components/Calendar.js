@@ -5,7 +5,12 @@ import { useState } from "react";
 import "react-datepicker/dist/react-datepicker.css";
 registerLocale("br", br);
 
-export default function Calendar() {
+export default function Calendar({
+  setRatingInfos,
+  ratingInfos,
+  startOrEndDate,
+  setShowCalendar,
+}) {
   const [startDate, setStartDate] = useState(new Date());
 
   return (
@@ -15,9 +20,24 @@ export default function Calendar() {
           showIcon
           locale="br"
           selected={startDate}
-          onChange={(date) => setStartDate(date)}
+          dateFormat="MMMM d, yyyy h:mm aa"
+          onChange={(date) => {
+            setStartDate(date);
+            {
+              startOrEndDate === "endDate"
+                ? setRatingInfos({
+                    ...ratingInfos,
+                    endDate: date.getUTCFullDate(),
+                  })
+                : setRatingInfos({
+                    ...ratingInfos,
+                    startDate: date.getUTCFullDate(),
+                  });
+            }
+          }}
         />
       </div>
+      <button onClick={() => setShowCalendar(false)}>ok</button>
     </DivCalendar>
   );
 }
@@ -33,10 +53,19 @@ const DivCalendar = styled.div`
   position: absolute;
   top: 0;
   z-index: 3;
+
   .calendar {
-    display: flex;
-    justify-content: center;
-    width: 70%;
     margin-top: 25vh;
+    display: flex;
+    align-items: center;
+    width: 70%;
+
+    button {
+      height: 30px;
+      background-color: #ffffff;
+      color: #574145;
+      font-size: 14px;
+      border: 1px dashed #000000;
+    }
   }
 `;
