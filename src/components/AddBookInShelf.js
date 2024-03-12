@@ -5,7 +5,7 @@ import axios from "axios";
 import { Rating } from "react-simple-star-rating";
 
 import TokenContext from "../context/TokenContext";
-import { logOut } from "../utils";
+import { dateCodateConverter, logOut } from "../utils";
 import UserContext from "../context/UserContext";
 import { CalendarDays, Undo2 } from "lucide-react";
 import Calendar from "./Calendar";
@@ -15,22 +15,36 @@ export default function AddBookInShelf() {
   const navigate = useNavigate();
   const { setUser } = useContext(UserContext);
   const [book, setBook] = useState("");
+  const [editable, setEditable] = useState(false);
   const [showCalendar, setShowCalendar] = useState(false);
   const [infosPost, setInfosPost] = useState({
     iHave: false,
-    bookId: id,
-    type: "",
+    bookId: Number(id),
+    type: "Papel",
     status: "Lido",
   });
   const [ratingInfos, setRatingInfos] = useState({
-    bookId: id,
+    bookId: Number(id),
     shelfId: "",
-    stars: 0,
+    stars: 0.0,
     startDate: "",
     endDate: "",
   });
   const [rating, setRating] = useState(0);
   const { token, setToken } = useContext(TokenContext);
+
+  const bookTypeMapper = {
+    Papel: "paper",
+    "E-book": "ebook",
+    Áudio: "audio",
+  };
+  const bookStatusMapper = {
+    Lido: "done",
+    Lendo: "reading",
+    "Quero ler": "wish",
+    Abandonei: "abandoned",
+    Relendo: "rereading",
+  };
 
   useEffect(() => {
     async function getBookById() {
@@ -42,17 +56,43 @@ export default function AddBookInShelf() {
       };
       try {
         const { data } = await axios.get(URL, config);
+        console.log("data: ", data);
         setBook(data);
+        if (data.status) {
+          const typeBook = Object.keys(bookTypeMapper).find(
+            (key) => bookTypeMapper[key] === data.type
+          );
+          const statusBook = Object.keys(bookStatusMapper).find(
+            (key) => bookStatusMapper[key] === data.status
+          );
+          setInfosPost({
+            ...infosPost,
+            status: statusBook,
+            type: typeBook,
+            iHave: data.iHave,
+          });
+        }
+        if (data.status && data.status === "done") {
+          const inicialDate = dateCodateConverter(data.startDate);
+          const finalDate = dateCodateConverter(data.endDate);
+          setRatingInfos({
+            ...ratingInfos,
+            startDate: inicialDate,
+            endDate: finalDate,
+          });
+          setRating(data.totalstars);
+        }
       } catch (err) {
-        console.log(err.response);
-        if (err.response.status === 401) {
+        console.log("err: ", err);
+        console.log("error.response", err.response);
+        if (err.response?.status === 401) {
           alert("Usuário inválido, faça login novamente");
           logOut(setToken, setUser, navigate);
-        }
-        if (err.response.status === 404) {
+        } else if (err.response?.status === 404) {
           alert("Livro não encontrado");
           navigate("/shelf");
-        } else {
+        } else if (err.response) {
+          console.log("erro");
           alert("Houve um erro ao realizar sua busca!");
         }
       }
@@ -62,17 +102,56 @@ export default function AddBookInShelf() {
 
   async function post(event) {
     event.preventDefault();
-    // setButtonState(true);
-    // setButtonLoading(<Loading />);
+    setEditable(false);
     const URL = `${process.env.REACT_APP_API_URL}/shelf`;
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    const type = bookTypeMapper[infosPost.type];
+    const status = bookStatusMapper[infosPost.status];
     try {
-      const { data } = await axios.post(URL, infosPost);
+      const { data } = await axios.post(
+        URL,
+        { ...infosPost, type, status },
+        config
+      );
       setRatingInfos({ ...ratingInfos, shelfId: data.id });
     } catch (err) {
       console.log(err.response);
       alert("Algo deu errado, tente novamente");
     }
   }
+
+  useEffect(() => {
+    async function postRating() {
+      const URL = `${process.env.REACT_APP_API_URL}/rating`;
+      const config = {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      try {
+        await axios.post(
+          URL,
+          {
+            ...ratingInfos,
+            startDate: new Date(ratingInfos.startDate).toISOString(),
+            endDate: new Date(ratingInfos.endDate).toISOString(),
+            stars: ratingInfos.stars,
+          },
+          config
+        );
+      } catch (err) {
+        console.log(err.response);
+        alert("Algo deu errado, tente novamente");
+      }
+    }
+    if (infosPost.status === "Lido" && ratingInfos.shelfId !== "") {
+      postRating();
+    }
+  }, [ratingInfos.shelfId]);
 
   const { iHave, status, type } = infosPost;
   const bookStatus = ["Lido", "Lendo", "Quero ler", "Abandonei", "Relendo"];
@@ -82,6 +161,7 @@ export default function AddBookInShelf() {
     setRating(rate);
     setRatingInfos({ ...ratingInfos, stars: rate });
   };
+  console.log("editable: ", editable);
 
   return (
     <>
@@ -91,29 +171,34 @@ export default function AddBookInShelf() {
         </div>
         <img src={book?.bookImage} alt="Capa do livro" />
         {book && (
-          <form>
+          <form onSubmit={post}>
             <div className="have">
               <input
+                disabled={!editable}
                 required
                 onClick={() => setInfosPost({ ...infosPost, iHave: true })}
                 type="radio"
                 name="Ihave"
                 value="Tenho"
+                defaultChecked={infosPost.iHave === true}
               />
               <label>Tenho</label>
             </div>
             <div className="have">
               <input
+                disabled={!editable}
                 required
                 onClick={() => setInfosPost({ ...infosPost, iHave: false })}
                 type="radio"
                 name="Ihave"
                 value="Não tenho"
+                defaultChecked={infosPost.iHave === false}
               />
               <label>Não tenho</label>
             </div>
             {iHave && (
               <select
+                disabled={!editable}
                 required
                 value={type}
                 onChange={(e) => {
@@ -131,6 +216,7 @@ export default function AddBookInShelf() {
             )}
             <select
               required
+              disabled={!editable}
               value={status}
               onChange={(e) => {
                 setInfosPost({ ...infosPost, status: e.target.value });
@@ -150,6 +236,7 @@ export default function AddBookInShelf() {
                   <p>Quantas estrelas?</p>
                   <Rating
                     onClick={handleRating}
+                    disabled={!editable}
                     fillColor="#574145"
                     allowFraction={true}
                     transition={true}
@@ -175,7 +262,9 @@ export default function AddBookInShelf() {
                   <label>Data de início da Leitura</label>
                   <div className="date-input">
                     <input
-                      value={ratingInfos.endDate}
+                      disabled={!editable}
+                      required
+                      value={ratingInfos.startDate}
                       onClick={() => setShowCalendar("startDate")}
                     />
                     <CalendarDays size={20} />
@@ -183,6 +272,8 @@ export default function AddBookInShelf() {
                   <label>Data de fim da Leitura</label>
                   <div className="date-input">
                     <input
+                      disabled={!editable}
+                      required
                       value={ratingInfos.endDate}
                       onClick={() => setShowCalendar("endDate")}
                     />
@@ -205,7 +296,16 @@ export default function AddBookInShelf() {
             ) : (
               ""
             )}
-            <button type="submit"> Salvar</button>
+            {editable && <button type="submit"> Salvar</button>}
+            {!editable && (
+              <button
+                onClick={() => {
+                  setEditable(true);
+                }}
+              >
+                Editar
+              </button>
+            )}
           </form>
         )}
       </Container>
@@ -306,7 +406,7 @@ const Container = styled.section`
     flex-direction: column;
     justify-content: space-evenly;
     input {
-      width: 60%;
+      width: 100%;
       height: 30px;
       border-radius: 5px;
       border: none;

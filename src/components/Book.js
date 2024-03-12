@@ -21,6 +21,7 @@ export default function Book({ book }) {
         {book.shelf[0]?.status === "done" ? (
           <div className="status">
             <BookOpenCheck
+              onClick={() => navigate(`/addBook/${book.id}`)}
               color="#00693e"
               fill="#00693e"
               fillOpacity={0.5}
@@ -30,6 +31,7 @@ export default function Book({ book }) {
         ) : book.shelf[0]?.status === "reading" ? (
           <div className="status">
             <BookOpen
+              onClick={() => navigate(`/addBook/${book.id}`)}
               color="#f3b93f"
               fill="#f3b93f"
               fillOpacity={0.5}
@@ -38,11 +40,16 @@ export default function Book({ book }) {
           </div>
         ) : book.shelf[0]?.status === "wish" ? (
           <div className="status">
-            <BookDashed color="#175676" size={25} />
+            <BookDashed
+              onClick={() => navigate(`/addBook/${book.id}`)}
+              color="#175676"
+              size={25}
+            />
           </div>
         ) : book.shelf[0]?.status === "abandoned" ? (
           <div className="status">
             <BookDown
+              onClick={() => navigate(`/addBook/${book.id}`)}
               color="#000000"
               fill="#000000"
               fillOpacity={0.5}
@@ -52,6 +59,7 @@ export default function Book({ book }) {
         ) : book.shelf[0]?.status === "rereading" ? (
           <div className="status">
             <BookOpen
+              onClick={() => navigate(`/addBook/${book.id}`)}
               color="#df6d2f"
               fill="#df6d2f"
               fillOpacity={0.5}

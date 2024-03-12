@@ -1,7 +1,14 @@
 import styled from "styled-components";
 import { useNavigate, useParams } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
-import { Plus, Undo2 } from "lucide-react";
+import {
+  BookDashed,
+  BookDown,
+  BookOpen,
+  BookOpenCheck,
+  Plus,
+  Undo2,
+} from "lucide-react";
 
 import Footer from "./Footer";
 import TokenContext from "../context/TokenContext";
@@ -15,6 +22,7 @@ export default function BookInfos() {
   const [book, setBook] = useState("");
   const navigate = useNavigate();
   const { setUser } = useContext(UserContext);
+  const sizeIcon = 30;
 
   useEffect(() => {
     async function getfBookById() {
@@ -43,6 +51,7 @@ export default function BookInfos() {
     }
     getfBookById();
   }, []);
+
   return (
     <>
       <Container>
@@ -51,7 +60,52 @@ export default function BookInfos() {
         </div>
         <section className="div-img">
           <img src={book.bookImage} alt="capa do livro" />
-          <Plus className="plus" color="#574145" size={40} />
+          {book.status === "done" ? (
+            <BookOpenCheck
+              className="icon-status"
+              color="#00693e"
+              fill="#00693e"
+              fillOpacity={0.5}
+              size={sizeIcon}
+            />
+          ) : book.status === "reading" ? (
+            <BookOpen
+              className="icon-status"
+              color="#f3b93f"
+              fill="#f3b93f"
+              fillOpacity={0.5}
+              size={sizeIcon}
+            />
+          ) : book.status === "wish" ? (
+            <BookDashed
+              className="icon-status"
+              color="#175676"
+              size={sizeIcon}
+            />
+          ) : book.status === "abandoned" ? (
+            <BookDown
+              className="icon-status"
+              color="#000000"
+              fill="#000000"
+              fillOpacity={0.5}
+              size={sizeIcon}
+            />
+          ) : book.status === "rereading" ? (
+            <BookOpen
+              className="icon-status"
+              color="#df6d2f"
+              fill="#df6d2f"
+              fillOpacity={0.5}
+              size={25}
+            />
+          ) : (
+            <Plus
+              className="icon-status"
+              onClick={() => navigate(`/addBook/${book.id}`)}
+              color="#574145"
+              size={sizeIcon}
+            />
+          )}
           <div className="book-infos">
             <strong>{book.title}</strong>
             <small>{book?.author?.name}</small>
@@ -96,7 +150,7 @@ const Container = styled.section`
     justify-content: flex-start;
     align-items: center;
   }
-  .plus {
+  .icon-status {
     position: fixed;
     top: 22vh;
     right: 50;
@@ -111,7 +165,7 @@ const Container = styled.section`
     align-items: center;
     strong {
       font-weight: 600;
-      padding-bottom: 10px;
+      padding: 10px;
     }
     small {
       padding-bottom: 15px;

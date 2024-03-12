@@ -24,8 +24,12 @@ export default function CalendarToYear({ setFilter, setSrcBar, search }) {
           dateFormat="yyyy"
         />
 
-        <button onClick={search}>ok</button>
-        <button onClick={() => setFilter("filtrar por:")}>cancelar</button>
+        <button className="confirm" onClick={search}>
+          ok
+        </button>
+        <button className="confirm" onClick={() => setFilter("filtrar por:")}>
+          cancelar
+        </button>
       </div>
     </DivCalendar>
   );
@@ -51,10 +55,16 @@ const DivCalendar = styled.div`
 
     button {
       height: 30px;
+    }
+    .confirm {
       background-color: #ffffff;
       color: #574145;
       font-size: 14px;
       border: 1px dashed #000000;
+    }
+    .react-datepicker {
+      background-color: #fde8e9;
+      border: 2px solid #574145;
     }
   }
 `;

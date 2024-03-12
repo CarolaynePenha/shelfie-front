@@ -4,7 +4,7 @@ import styled from "styled-components";
 export default function Bookshelf({ shelfBook }) {
   const navigate = useNavigate();
   return shelfBook?.book ? (
-    <DivShelfBook onClick={() => navigate(`/bookInfos/${shelfBook.book.id}`)}>
+    <DivShelfBook onClick={() => navigate(`/bookInfos/${shelfBook.bookId}`)}>
       <img src={shelfBook.book.bookImage} alt="Capa do livro" />
     </DivShelfBook>
   ) : (
