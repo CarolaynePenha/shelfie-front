@@ -9,9 +9,10 @@ import { dateCodateConverter, logOut } from "../utils";
 import UserContext from "../context/UserContext";
 import { CalendarDays, Undo2 } from "lucide-react";
 import Calendar from "./Calendar";
+import { update } from "tar";
 
 export default function AddBookInShelf() {
-  const { id } = useParams();
+  const { id, existInShelf } = useParams();
   const navigate = useNavigate();
   const { setUser } = useContext(UserContext);
   const [book, setBook] = useState("");
@@ -153,6 +154,46 @@ export default function AddBookInShelf() {
     }
   }, [ratingInfos.shelfId]);
 
+  async function updateShelfInfos(body) {
+    setEditable(false);
+    const URL = `${process.env.REACT_APP_API_URL}/shelf`;
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    const type = bookTypeMapper[infosPost.type];
+    const status = bookStatusMapper[infosPost.status];
+    try {
+      await axios.put(URL, { ...infosPost, type, status }, config);
+    } catch (err) {
+      console.log(err.response);
+      alert("Algo deu errado, tente novamente");
+    }
+  }
+
+  async function updateRating() {
+    setEditable(false);
+    const URL = `${process.env.REACT_APP_API_URL}/shelf`;
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    const type = bookTypeMapper[infosPost.type];
+    const status = bookStatusMapper[infosPost.status];
+    try {
+      const { data } = await axios.put(
+        URL,
+        { ...infosPost, type, status },
+        config
+      );
+    } catch (err) {
+      console.log(err.response);
+      alert("Algo deu errado, tente novamente");
+    }
+  }
+
   const { iHave, status, type } = infosPost;
   const bookStatus = ["Lido", "Lendo", "Quero ler", "Abandonei", "Relendo"];
   const bookType = ["Papel", "E-book", "Áudio"];
@@ -160,8 +201,10 @@ export default function AddBookInShelf() {
   const handleRating = (rate) => {
     setRating(rate);
     setRatingInfos({ ...ratingInfos, stars: rate });
+    if (existInShelf === "existingBook") {
+      updateRating();
+    }
   };
-  console.log("editable: ", editable);
 
   return (
     <>
@@ -170,7 +213,7 @@ export default function AddBookInShelf() {
           <Undo2 onClick={() => navigate(-1)} color="#574145" size={25} />
         </div>
         <img src={book?.bookImage} alt="Capa do livro" />
-        {book && (
+        {book && existInShelf === "newBook" && (
           <form onSubmit={post}>
             <div className="have">
               <input
@@ -236,7 +279,6 @@ export default function AddBookInShelf() {
                   <p>Quantas estrelas?</p>
                   <Rating
                     onClick={handleRating}
-                    disabled={!editable}
                     fillColor="#574145"
                     allowFraction={true}
                     transition={true}
@@ -307,6 +349,155 @@ export default function AddBookInShelf() {
               </button>
             )}
           </form>
+        )}
+        {book && existInShelf === "existingBook" && (
+          <>
+            <div className="have">
+              <input
+                disabled={!editable}
+                required
+                onClick={() => {
+                  setInfosPost({ ...infosPost, iHave: true });
+                  updateShelfInfos();
+                }}
+                type="radio"
+                name="Ihave"
+                value="Tenho"
+                defaultChecked={infosPost.iHave === true}
+              />
+              <label>Tenho</label>
+            </div>
+            <div className="have">
+              <input
+                disabled={!editable}
+                required
+                onClick={() => {
+                  setInfosPost({ ...infosPost, iHave: false });
+                  updateShelfInfos();
+                }}
+                type="radio"
+                name="Ihave"
+                value="Não tenho"
+                defaultChecked={infosPost.iHave === false}
+              />
+              <label>Não tenho</label>
+            </div>
+            {iHave && (
+              <select
+                disabled={!editable}
+                required
+                value={type}
+                onChange={(e) => {
+                  setInfosPost({ ...infosPost, type: e.target.value });
+                  updateShelfInfos();
+                }}
+              >
+                {bookType.map((value, index) => {
+                  return (
+                    <option key={index} value={value}>
+                      {value}
+                    </option>
+                  );
+                })}
+              </select>
+            )}
+            <select
+              required
+              disabled={!editable}
+              value={status}
+              onChange={(e) => {
+                setInfosPost({ ...infosPost, status: e.target.value });
+                updateShelfInfos();
+              }}
+            >
+              {bookStatus.map((value, index) => {
+                return (
+                  <option key={index} value={value}>
+                    {value}
+                  </option>
+                );
+              })}
+            </select>
+            {infosPost.status === "Lido" ? (
+              <>
+                <div className="rating">
+                  <p>Quantas estrelas?</p>
+                  <Rating
+                    onClick={handleRating}
+                    fillColor="#574145"
+                    allowFraction={true}
+                    transition={true}
+                    size={50}
+                    tooltipDefaultText={"Avalie"}
+                    showTooltip={true}
+                    initialValue={rating}
+                    tooltipArray={[
+                      "Muito ruim:  0.5",
+                      "Ruim:  1.0",
+                      "Ruim:  1.5",
+                      "Razoável:  2.0",
+                      "Razoável:  2.5",
+                      "Bom:  3.0",
+                      "Bom:  3.5",
+                      "Muito Bom:  4.0",
+                      "Quase Perfeito:  4.5 ",
+                      "Perfeito:  5.0",
+                    ]}
+                  />
+                </div>
+                <div className="date">
+                  <label>Data de início da Leitura</label>
+                  <div className="date-input">
+                    <input
+                      disabled={!editable}
+                      required
+                      value={ratingInfos.startDate}
+                      onClick={() => {
+                        setShowCalendar("startDate");
+                      }}
+                    />
+                    <CalendarDays size={20} />
+                  </div>
+                  <label>Data de fim da Leitura</label>
+                  <div className="date-input">
+                    <input
+                      disabled={!editable}
+                      required
+                      value={ratingInfos.endDate}
+                      onClick={() => {
+                        setShowCalendar("endDate");
+                      }}
+                    />
+                    <CalendarDays size={20} />
+                  </div>
+
+                  {showCalendar === "startDate" ||
+                  showCalendar === "endDate" ? (
+                    <Calendar
+                      setRatingInfos={setRatingInfos}
+                      ratingInfos={ratingInfos}
+                      startOrEndDate={showCalendar}
+                      setShowCalendar={setShowCalendar}
+                      updateRating={updateRating}
+                    />
+                  ) : (
+                    ""
+                  )}
+                </div>
+              </>
+            ) : (
+              ""
+            )}
+            {!editable && (
+              <button
+                onClick={() => {
+                  setEditable(true);
+                }}
+              >
+                Editar
+              </button>
+            )}
+          </>
         )}
       </Container>
     </>

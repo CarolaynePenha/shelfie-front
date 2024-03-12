@@ -10,6 +10,7 @@ export default function Calendar({
   ratingInfos,
   startOrEndDate,
   setShowCalendar,
+  updateRating,
 }) {
   const [startDate, setStartDate] = useState(new Date());
   console.log("ratingInfos: ", ratingInfos);
@@ -37,7 +38,13 @@ export default function Calendar({
             }
           }}
         />
-        <button className="confirm" onClick={() => setShowCalendar(false)}>
+        <button
+          className="confirm"
+          onClick={() => {
+            setShowCalendar(false);
+            // updateRating();
+          }}
+        >
           ok
         </button>
       </div>

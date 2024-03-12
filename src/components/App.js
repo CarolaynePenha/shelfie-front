@@ -28,7 +28,10 @@ function App() {
               <Route path="/ranking" element={<Ranking />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/bookInfos/:id" element={<BookInfos />} />
-              <Route path="/addBook/:id" element={<AddBookInShelf />} />
+              {/* <Route
+                path="/addBook/:id/:existInShelf"
+                element={<AddBookInShelf />}
+              /> */}
             </Routes>
           </BrowserRouter>
         </UserProvider>

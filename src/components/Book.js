@@ -10,6 +10,9 @@ import styled from "styled-components";
 
 export default function Book({ book }) {
   const navigate = useNavigate();
+  const existInShelf = { newBook: "newBook", existingBook: "existingBook" };
+  const { newBook, existingBook } = existInShelf;
+
   return book ? (
     <DivBook>
       <img src={book.bookImage} alt="Capa do livro" />
@@ -31,7 +34,7 @@ export default function Book({ book }) {
         ) : book.shelf[0]?.status === "reading" ? (
           <div className="status">
             <BookOpen
-              onClick={() => navigate(`/addBook/${book.id}`)}
+              onClick={() => navigate(`/addBook/${book.id}/${existingBook}`)}
               color="#f3b93f"
               fill="#f3b93f"
               fillOpacity={0.5}
@@ -41,7 +44,7 @@ export default function Book({ book }) {
         ) : book.shelf[0]?.status === "wish" ? (
           <div className="status">
             <BookDashed
-              onClick={() => navigate(`/addBook/${book.id}`)}
+              onClick={() => navigate(`/addBook/${book.id}/${existingBook}`)}
               color="#175676"
               size={25}
             />
@@ -49,7 +52,7 @@ export default function Book({ book }) {
         ) : book.shelf[0]?.status === "abandoned" ? (
           <div className="status">
             <BookDown
-              onClick={() => navigate(`/addBook/${book.id}`)}
+              onClick={() => navigate(`/addBook/${book.id}/${existingBook}`)}
               color="#000000"
               fill="#000000"
               fillOpacity={0.5}
@@ -59,7 +62,7 @@ export default function Book({ book }) {
         ) : book.shelf[0]?.status === "rereading" ? (
           <div className="status">
             <BookOpen
-              onClick={() => navigate(`/addBook/${book.id}`)}
+              onClick={() => navigate(`/addBook/${book.id}/${existingBook}`)}
               color="#df6d2f"
               fill="#df6d2f"
               fillOpacity={0.5}
@@ -69,7 +72,7 @@ export default function Book({ book }) {
         ) : (
           <div className="status">
             <Plus
-              onClick={() => navigate(`/addBook/${book.id}`)}
+              onClick={() => navigate(`/addBook/${book.id}/${newBook}`)}
               color="#574145"
               size={25}
             />
