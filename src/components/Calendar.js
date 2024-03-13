@@ -3,7 +3,6 @@ import DatePicker, { registerLocale } from "react-datepicker";
 import br from "date-fns/locale/pt-BR";
 import { useState } from "react";
 import "react-datepicker/dist/react-datepicker.css";
-import { dateConverter } from "../utils";
 registerLocale("br", br);
 
 export default function Calendar({
@@ -11,11 +10,10 @@ export default function Calendar({
   ratingInfos,
   startOrEndDate,
   setShowCalendar,
-  updateRating,
+  handleSubmitRating,
+  existInShelfParams,
 }) {
   const [startDate, setStartDate] = useState(new Date());
-  console.log("ratingInfos: ", ratingInfos);
-
   return (
     <DivCalendar>
       <div className="calendar">
@@ -42,8 +40,10 @@ export default function Calendar({
         <button
           className="confirm"
           onClick={() => {
+            if (existInShelfParams === "existingBook") {
+              handleSubmitRating(false);
+            }
             setShowCalendar(false);
-            updateRating();
           }}
         >
           ok
@@ -93,7 +93,6 @@ const DivCalendar = styled.div`
       background-color: #574145;
       color: #ffffff;
       font-size: 14px;
-      border: 1px dashed #000000;
       margin: 0;
     }
   }

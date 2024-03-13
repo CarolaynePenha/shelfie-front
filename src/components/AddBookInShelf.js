@@ -12,6 +12,7 @@ import Calendar from "./Calendar";
 
 export default function AddBookInShelf() {
   const { id, existInShelf } = useParams();
+  const [existInShelfParams, setExistInShelfParams] = useState(existInShelf);
   const navigate = useNavigate();
   const { setUser } = useContext(UserContext);
   const [book, setBook] = useState("");
@@ -46,6 +47,8 @@ export default function AddBookInShelf() {
     Abandonei: "abandoned",
     Relendo: "rereading",
   };
+  let bookStatus = false;
+  let bookType = false;
 
   useEffect(() => {
     async function getBookById() {
@@ -58,7 +61,6 @@ export default function AddBookInShelf() {
 
       try {
         const { data } = await axios.get(URL, config);
-        console.log("data: ", data);
         setBook(data);
         if (data.status) {
           const typeBook = Object.keys(bookTypeMapper).find(
@@ -74,11 +76,19 @@ export default function AddBookInShelf() {
             iHave: data.iHave,
           });
         }
-        if (existInShelf === "existingBook") {
+        if (existInShelfParams === "newBook") {
           setRatingInfos({
             ...ratingInfos,
-            startDate: data.startDate,
-            endDate: data.endDate,
+            startDate: new Date(),
+            endDate: new Date(),
+          });
+        }
+
+        if (existInShelfParams === "existingBook") {
+          setRatingInfos({
+            ...ratingInfos,
+            startDate: data.startDate || new Date(),
+            endDate: data.endDate || new Date(),
             shelfId: data.id,
           });
           setRating(data.totalstars);
@@ -99,7 +109,7 @@ export default function AddBookInShelf() {
       }
     }
     getBookById();
-  }, []);
+  }, [existInShelfParams]);
 
   async function post(event) {
     event.preventDefault();
@@ -112,59 +122,82 @@ export default function AddBookInShelf() {
     };
     const type = bookTypeMapper[infosPost.type];
     const status = bookStatusMapper[infosPost.status];
+
     try {
       const { data } = await axios.post(
         URL,
         { ...infosPost, type, status },
         config
       );
-      setRatingInfos({ ...ratingInfos, shelfId: data.id });
+      if (infosPost.status === "Lido") {
+        postRating(data.id);
+      }
+      if (infosPost.status !== "Lido") {
+        setExistInShelfParams("existingBook");
+      }
     } catch (err) {
       console.log(err.response);
       alert("Algo deu errado, tente novamente");
     }
   }
 
-  useEffect(() => {
-    async function postRating() {
-      const URL = `${process.env.REACT_APP_API_URL}/rating`;
-      const config = {
-        headers: {
-          Authorization: `Bearer ${token}`,
+  async function postRating(shelfId) {
+    const URL = `${process.env.REACT_APP_API_URL}/rating`;
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    try {
+      const { data } = await axios.post(
+        URL,
+        {
+          ...ratingInfos,
+          startDate: new Date(ratingInfos.startDate).toISOString(),
+          endDate: new Date(ratingInfos.endDate).toISOString(),
+          stars: ratingInfos.stars,
+          shelfId,
         },
-      };
-      try {
-        await axios.post(
-          URL,
-          {
-            ...ratingInfos,
-            startDate: new Date(ratingInfos.startDate).toISOString(),
-            endDate: new Date(ratingInfos.endDate).toISOString(),
-            stars: ratingInfos.stars,
-          },
-          config
-        );
-      } catch (err) {
-        console.log(err.response);
-        alert("Algo deu errado, tente novamente");
+        config
+      );
+      if (existInShelfParams === "newBook") {
+        setExistInShelfParams("existingBook");
       }
+      setBook({ ...book, ratingId: data.id });
+    } catch (err) {
+      console.log(err.response);
+      alert("Algo deu errado, tente novamente");
     }
-    if (infosPost.status === "Lido" && existInShelf === "newBook") {
-      postRating();
-    }
-  }, [ratingInfos.shelfId]);
+  }
 
-  async function updateShelfInfos() {
+  async function updateShelfInfos({ bookStatus, bookType, iHaveBook }) {
     const URL = `${process.env.REACT_APP_API_URL}/shelf`;
     const config = {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     };
-    const type = bookTypeMapper[infosPost.type];
-    const status = bookStatusMapper[infosPost.status];
+    let status;
+    let type;
+    if (!bookType && bookStatus) {
+      status = bookStatusMapper[bookStatus];
+    } else if (bookType && !bookStatus) {
+      type = bookTypeMapper[bookType];
+    } else if (!bookType && !bookStatus) {
+      type = bookTypeMapper[infosPost.type];
+      status = bookStatusMapper[infosPost.status];
+    }
+    let iHave;
+    if (iHaveBook === "true") {
+      iHave = true;
+    } else if (iHaveBook === "false") {
+      iHave = false;
+    } else {
+      iHave = infosPost.iHave;
+    }
+
     try {
-      await axios.put(URL, { ...infosPost, type, status }, config);
+      await axios.put(URL, { ...infosPost, type, status, iHave }, config);
     } catch (err) {
       console.log(err.response);
       alert("Algo deu errado, tente novamente");
@@ -178,8 +211,6 @@ export default function AddBookInShelf() {
         Authorization: `Bearer ${token}`,
       },
     };
-    const test = new Date(ratingInfos.startDate).toISOString();
-    console.log("test: ", test);
     try {
       await axios.put(
         URL,
@@ -187,7 +218,7 @@ export default function AddBookInShelf() {
           ...ratingInfos,
           startDate: convertToISOString(ratingInfos.startDate),
           endDate: convertToISOString(ratingInfos.endDate),
-          stars: rate,
+          stars: rate || ratingInfos.stars,
         },
         config
       );
@@ -197,15 +228,40 @@ export default function AddBookInShelf() {
     }
   }
 
+  async function deleteBooksInShelf() {
+    const URL = `${process.env.REACT_APP_API_URL}/shelf/${book.bookId}/${book.id}`;
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    try {
+      await axios.delete(URL, config);
+      navigate("/shelf");
+    } catch (err) {
+      console.log(err.response);
+      alert("Algo deu errado, tente novamente");
+    }
+  }
+
   const { iHave, status, type } = infosPost;
-  const bookStatus = ["Lido", "Lendo", "Quero ler", "Abandonei", "Relendo"];
-  const bookType = ["Papel", "E-book", "Áudio"];
+  const bookStatusArr = ["Lido", "Lendo", "Quero ler", "Abandonei", "Relendo"];
+  const bookTypeArr = ["Papel", "E-book", "Áudio"];
 
   const handleRating = (rate) => {
     setRating(rate);
     setRatingInfos({ ...ratingInfos, stars: rate });
-    if (existInShelf === "existingBook") {
+    if (existInShelfParams === "existingBook") {
+      handleSubmitRating(rate);
+    }
+  };
+
+  const handleSubmitRating = (rate) => {
+    if (book.ratingId) {
       updateRating(rate);
+    } else {
+      postRating(book.id);
     }
   };
 
@@ -216,11 +272,10 @@ export default function AddBookInShelf() {
           <Undo2 onClick={() => navigate(-1)} color="#574145" size={25} />
         </div>
         <img src={book?.bookImage} alt="Capa do livro" />
-        {book && existInShelf === "newBook" && (
+        {book && existInShelfParams === "newBook" && (
           <form onSubmit={post}>
             <div className="have">
               <input
-                disabled={!editable}
                 required
                 onClick={() => setInfosPost({ ...infosPost, iHave: true })}
                 type="radio"
@@ -232,7 +287,6 @@ export default function AddBookInShelf() {
             </div>
             <div className="have">
               <input
-                disabled={!editable}
                 required
                 onClick={() => setInfosPost({ ...infosPost, iHave: false })}
                 type="radio"
@@ -244,14 +298,13 @@ export default function AddBookInShelf() {
             </div>
             {iHave && (
               <select
-                disabled={!editable}
                 required
                 value={type}
                 onChange={(e) => {
                   setInfosPost({ ...infosPost, type: e.target.value });
                 }}
               >
-                {bookType.map((value, index) => {
+                {bookTypeArr.map((value, index) => {
                   return (
                     <option key={index} value={value}>
                       {value}
@@ -262,13 +315,12 @@ export default function AddBookInShelf() {
             )}
             <select
               required
-              disabled={!editable}
               value={status}
               onChange={(e) => {
                 setInfosPost({ ...infosPost, status: e.target.value });
               }}
             >
-              {bookStatus.map((value, index) => {
+              {bookStatusArr.map((value, index) => {
                 return (
                   <option key={index} value={value}>
                     {value}
@@ -307,9 +359,8 @@ export default function AddBookInShelf() {
                   <label>Data de início da Leitura</label>
                   <div className="date-input">
                     <input
-                      disabled={!editable}
                       required
-                      value={ratingInfos.startDate}
+                      value={dateConverterToString(ratingInfos.startDate)}
                       onClick={() => setShowCalendar("startDate")}
                     />
                     <CalendarDays size={20} />
@@ -317,9 +368,8 @@ export default function AddBookInShelf() {
                   <label>Data de fim da Leitura</label>
                   <div className="date-input">
                     <input
-                      disabled={!editable}
                       required
-                      value={ratingInfos.endDate}
+                      value={dateConverterToString(ratingInfos.endDate)}
                       onClick={() => setShowCalendar("endDate")}
                     />
                     <CalendarDays size={20} />
@@ -332,6 +382,8 @@ export default function AddBookInShelf() {
                       ratingInfos={ratingInfos}
                       startOrEndDate={showCalendar}
                       setShowCalendar={setShowCalendar}
+                      existInShelfParams={existInShelfParams}
+                      handleSubmitRating={handleSubmitRating}
                     />
                   ) : (
                     ""
@@ -341,19 +393,10 @@ export default function AddBookInShelf() {
             ) : (
               ""
             )}
-            {editable && <button type="submit"> Salvar</button>}
-            {!editable && (
-              <button
-                onClick={() => {
-                  setEditable(true);
-                }}
-              >
-                Editar
-              </button>
-            )}
+            <button type="submit"> Salvar</button>
           </form>
         )}
-        {book && existInShelf === "existingBook" && (
+        {book && existInShelfParams === "existingBook" && (
           <section>
             <div className="have">
               <input
@@ -361,7 +404,7 @@ export default function AddBookInShelf() {
                 required
                 onClick={() => {
                   setInfosPost({ ...infosPost, iHave: true });
-                  updateShelfInfos();
+                  updateShelfInfos({ bookStatus, bookType, iHaveBook: "true" });
                 }}
                 type="radio"
                 name="Ihave"
@@ -376,7 +419,11 @@ export default function AddBookInShelf() {
                 required
                 onClick={() => {
                   setInfosPost({ ...infosPost, iHave: false });
-                  updateShelfInfos();
+                  updateShelfInfos({
+                    bookStatus,
+                    bookType,
+                    iHaveBook: "false",
+                  });
                 }}
                 type="radio"
                 name="Ihave"
@@ -392,10 +439,11 @@ export default function AddBookInShelf() {
                 value={type}
                 onChange={(e) => {
                   setInfosPost({ ...infosPost, type: e.target.value });
-                  updateShelfInfos();
+                  bookType = e.target.value;
+                  updateShelfInfos({ bookStatus, bookType });
                 }}
               >
-                {bookType.map((value, index) => {
+                {bookTypeArr.map((value, index) => {
                   return (
                     <option key={index} value={value}>
                       {value}
@@ -410,10 +458,11 @@ export default function AddBookInShelf() {
               value={status}
               onChange={(e) => {
                 setInfosPost({ ...infosPost, status: e.target.value });
-                updateShelfInfos();
+                bookStatus = e.target.value;
+                updateShelfInfos({ bookStatus, bookType });
               }}
             >
-              {bookStatus.map((value, index) => {
+              {bookStatusArr.map((value, index) => {
                 return (
                   <option key={index} value={value}>
                     {value}
@@ -481,7 +530,8 @@ export default function AddBookInShelf() {
                       ratingInfos={ratingInfos}
                       startOrEndDate={showCalendar}
                       setShowCalendar={setShowCalendar}
-                      updateRating={updateRating}
+                      existInShelfParams={existInShelfParams}
+                      handleSubmitRating={handleSubmitRating}
                     />
                   ) : (
                     ""
@@ -492,13 +542,24 @@ export default function AddBookInShelf() {
               ""
             )}
             {!editable && (
-              <button
-                onClick={() => {
-                  setEditable(true);
-                }}
-              >
-                Editar
-              </button>
+              <>
+                {" "}
+                <button
+                  onClick={() => {
+                    setEditable(true);
+                  }}
+                >
+                  Editar
+                </button>
+                <button
+                  className="delete"
+                  onClick={() => {
+                    deleteBooksInShelf();
+                  }}
+                >
+                  Excluir
+                </button>
+              </>
             )}
             {editable && (
               <button
@@ -526,7 +587,7 @@ const Container = styled.section`
   position: relative;
 
   .header {
-    height: 19vh;
+    height: 15vh;
     width: 100%;
     background-color: #fde8e9;
     display: flex;
@@ -537,14 +598,13 @@ const Container = styled.section`
   img {
     height: 20vh;
     position: absolute;
-    top: 8vh;
+    top: 5vh;
   }
   section {
     width: 100%;
     margin-top: 10vh;
     display: flex;
     justify-content: space-evenly;
-    border-bottom: 1px solid #5741457a;
     flex-direction: column;
   }
   form {
@@ -559,7 +619,7 @@ const Container = styled.section`
     width: 50%;
     height: 40px;
     border-radius: 5px;
-    margin: 20px auto;
+    margin: 10px auto;
     border: none;
     background-color: #965361;
     color: #ffffff;
@@ -569,18 +629,21 @@ const Container = styled.section`
     justify-content: center;
     align-items: center;
   }
+  .delete {
+    background-color: transparent;
+    border: 2px dashed #790a1e;
+    color: #790a1e;
+  }
   .have {
     display: flex;
-    padding-top: 10px;
     margin: 10px auto;
   }
-  .have:last-child {
-    padding-bottom: 10px;
-    border-bottom: 1px solid #5741457a;
+  .have:first-child {
+    padding-top: 15px;
   }
   select {
     width: 60%;
-    margin: 20px auto;
+    margin: 10px auto;
     height: 30px;
     border-radius: 5px;
     border: none;
@@ -593,7 +656,6 @@ const Container = styled.section`
 
   .rating {
     width: 100%;
-    height: 20vh;
     padding: 20px;
     display: flex;
     flex-direction: column;
@@ -603,6 +665,7 @@ const Container = styled.section`
     p {
       font-size: 20px;
       font-weight: 600;
+      padding-bottom: 10px;
     }
     .react-simple-star-rating {
       display: flex;
@@ -617,7 +680,7 @@ const Container = styled.section`
     justify-content: space-evenly;
     input {
       width: 100%;
-      height: 30px;
+      height: 35px;
       border-radius: 5px;
       border: none;
       background-color: #ffffff;
@@ -628,7 +691,7 @@ const Container = styled.section`
     }
     .date-input {
       background-color: #ffffff;
-      height: 30px;
+      height: 35px;
       margin: 10px 10%;
       padding: 0 10px;
       display: flex;

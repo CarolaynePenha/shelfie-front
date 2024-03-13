@@ -113,11 +113,12 @@ export default function SignIn() {
           {buttonLoading}
         </button>
       </Form>
-      <Link to={"/signUp"}>
-        <ButtonRegisterLogin disabled={buttonState}>
-          <p>Não tem uma conta? Cadastre-se!</p>
-        </ButtonRegisterLogin>
-      </Link>
+
+      <ButtonRegisterLogin disabled={buttonState}>
+        <p onClick={() => navigate("/signUp")}>
+          Não tem uma conta? Cadastre-se!
+        </p>
+      </ButtonRegisterLogin>
     </Container>
   );
 }
@@ -144,6 +145,7 @@ export const ButtonRegisterLogin = styled.button`
   background-color: transparent;
   p {
     font-size: 16px;
+    color: #574145;
   }
   @media (min-width: 600px) {
     p {

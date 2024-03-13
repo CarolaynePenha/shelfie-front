@@ -1,3 +1,5 @@
+import dayjs from "dayjs";
+import "dayjs/locale/pt-br";
 export function logOut(setToken, setUser, navigate) {
   setToken(null);
   setUser("");
@@ -7,14 +9,7 @@ export function logOut(setToken, setUser, navigate) {
 }
 
 export function dateConverterToString(date) {
-  const dateObject = new Date(date);
-  const day = dateObject.getUTCDate();
-  const month = dateObject.getUTCMonth() + 1;
-  const year = dateObject.getUTCFullYear();
-  const formattedDay = day < 10 ? `0${day}` : day;
-  const formattedMonth = month < 10 ? `0${month}` : month;
-  const convertedDate = `${formattedDay}/${formattedMonth}/${year}`;
-  console.log("convertedDate: ", convertedDate);
+  const convertedDate = dayjs(date).locale("pt-br").format("DD/MM/YY");
   return convertedDate;
 }
 

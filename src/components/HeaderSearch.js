@@ -69,6 +69,7 @@ const DivHeader = styled.div`
       width: 60%;
       border: none;
       height: 35px;
+      z-index: 3;
     }
     img {
       width: 40%;

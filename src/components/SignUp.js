@@ -219,11 +219,9 @@ export default function SignUp() {
           {buttonLoading}
         </button>
       </Form>
-      <Link to={"/"}>
-        <ButtonRegisterLogin disabled={buttonState}>
-          <p>Não tem uma conta? Cadastre-se!</p>
-        </ButtonRegisterLogin>
-      </Link>
+      <ButtonRegisterLogin disabled={buttonState}>
+        <p onClick={() => navigate("/")}> Já tem uma conta? Faça Login!</p>
+      </ButtonRegisterLogin>
     </Container>
   );
 }
