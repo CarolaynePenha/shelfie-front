@@ -5,7 +5,7 @@ import axios from "axios";
 import { Rating } from "react-simple-star-rating";
 
 import TokenContext from "../context/TokenContext";
-import { dateCodateConverter, logOut } from "../utils";
+import { convertToISOString, dateConverterToString, logOut } from "../utils";
 import UserContext from "../context/UserContext";
 import { CalendarDays, Undo2 } from "lucide-react";
 import Calendar from "./Calendar";
@@ -30,6 +30,7 @@ export default function AddBookInShelf() {
     startDate: "",
     endDate: "",
   });
+
   const [rating, setRating] = useState(0);
   const { token, setToken } = useContext(TokenContext);
 
@@ -54,6 +55,7 @@ export default function AddBookInShelf() {
           Authorization: `Bearer ${token}`,
         },
       };
+
       try {
         const { data } = await axios.get(URL, config);
         console.log("data: ", data);
@@ -72,13 +74,12 @@ export default function AddBookInShelf() {
             iHave: data.iHave,
           });
         }
-        if (data.status && data.status === "done") {
-          const inicialDate = dateCodateConverter(data.startDate);
-          const finalDate = dateCodateConverter(data.endDate);
+        if (existInShelf === "existingBook") {
           setRatingInfos({
             ...ratingInfos,
-            startDate: inicialDate,
-            endDate: finalDate,
+            startDate: data.startDate,
+            endDate: data.endDate,
+            shelfId: data.id,
           });
           setRating(data.totalstars);
         }
@@ -148,13 +149,12 @@ export default function AddBookInShelf() {
         alert("Algo deu errado, tente novamente");
       }
     }
-    if (infosPost.status === "Lido" && ratingInfos.shelfId !== "") {
+    if (infosPost.status === "Lido" && existInShelf === "newBook") {
       postRating();
     }
   }, [ratingInfos.shelfId]);
 
-  async function updateShelfInfos(body) {
-    setEditable(false);
+  async function updateShelfInfos() {
     const URL = `${process.env.REACT_APP_API_URL}/shelf`;
     const config = {
       headers: {
@@ -171,20 +171,24 @@ export default function AddBookInShelf() {
     }
   }
 
-  async function updateRating() {
-    setEditable(false);
-    const URL = `${process.env.REACT_APP_API_URL}/shelf`;
+  async function updateRating(rate) {
+    const URL = `${process.env.REACT_APP_API_URL}/rating`;
     const config = {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     };
-    const type = bookTypeMapper[infosPost.type];
-    const status = bookStatusMapper[infosPost.status];
+    const test = new Date(ratingInfos.startDate).toISOString();
+    console.log("test: ", test);
     try {
-      const { data } = await axios.put(
+      await axios.put(
         URL,
-        { ...infosPost, type, status },
+        {
+          ...ratingInfos,
+          startDate: convertToISOString(ratingInfos.startDate),
+          endDate: convertToISOString(ratingInfos.endDate),
+          stars: rate,
+        },
         config
       );
     } catch (err) {
@@ -201,7 +205,7 @@ export default function AddBookInShelf() {
     setRating(rate);
     setRatingInfos({ ...ratingInfos, stars: rate });
     if (existInShelf === "existingBook") {
-      updateRating();
+      updateRating(rate);
     }
   };
 
@@ -350,7 +354,7 @@ export default function AddBookInShelf() {
           </form>
         )}
         {book && existInShelf === "existingBook" && (
-          <>
+          <section>
             <div className="have">
               <input
                 disabled={!editable}
@@ -426,7 +430,7 @@ export default function AddBookInShelf() {
                     fillColor="#574145"
                     allowFraction={true}
                     transition={true}
-                    size={50}
+                    size={40}
                     tooltipDefaultText={"Avalie"}
                     showTooltip={true}
                     initialValue={rating}
@@ -450,7 +454,7 @@ export default function AddBookInShelf() {
                     <input
                       disabled={!editable}
                       required
-                      value={ratingInfos.startDate}
+                      value={dateConverterToString(ratingInfos.startDate)}
                       onClick={() => {
                         setShowCalendar("startDate");
                       }}
@@ -462,7 +466,7 @@ export default function AddBookInShelf() {
                     <input
                       disabled={!editable}
                       required
-                      value={ratingInfos.endDate}
+                      value={dateConverterToString(ratingInfos.endDate)}
                       onClick={() => {
                         setShowCalendar("endDate");
                       }}
@@ -496,7 +500,16 @@ export default function AddBookInShelf() {
                 Editar
               </button>
             )}
-          </>
+            {editable && (
+              <button
+                onClick={() => {
+                  setEditable(false);
+                }}
+              >
+                Parar de editar
+              </button>
+            )}
+          </section>
         )}
       </Container>
     </>
@@ -523,10 +536,17 @@ const Container = styled.section`
   }
   img {
     height: 20vh;
-    position: fixed;
+    position: absolute;
     top: 8vh;
   }
-
+  section {
+    width: 100%;
+    margin-top: 10vh;
+    display: flex;
+    justify-content: space-evenly;
+    border-bottom: 1px solid #5741457a;
+    flex-direction: column;
+  }
   form {
     width: 100%;
     margin-top: 10vh;
@@ -534,20 +554,20 @@ const Container = styled.section`
     justify-content: space-evenly;
     border-bottom: 1px solid #5741457a;
     flex-direction: column;
-    button {
-      width: 50%;
-      height: 40px;
-      border-radius: 5px;
-      margin: 20px auto;
-      border: none;
-      background-color: #965361;
-      color: #ffffff;
-      font-weight: 600;
-      font-size: 16px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
+  }
+  button {
+    width: 50%;
+    height: 40px;
+    border-radius: 5px;
+    margin: 20px auto;
+    border: none;
+    background-color: #965361;
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
   .have {
     display: flex;

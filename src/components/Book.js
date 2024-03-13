@@ -24,7 +24,7 @@ export default function Book({ book }) {
         {book.shelf[0]?.status === "done" ? (
           <div className="status">
             <BookOpenCheck
-              onClick={() => navigate(`/addBook/${book.id}`)}
+              onClick={() => navigate(`/addBook/${book.id}/${existingBook}`)}
               color="#00693e"
               fill="#00693e"
               fillOpacity={0.5}

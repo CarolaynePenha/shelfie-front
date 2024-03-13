@@ -34,8 +34,9 @@ export default function Shelf() {
         const { data } = await axios.get(URL, config);
         setShelfBooks(data);
       } catch (err) {
+        console.log("err: ", err);
         console.log(err.response);
-        if (err.response.status === 401) {
+        if (err.response?.status === 401) {
           alert("Usuário inválido, faça login novamente");
           logOut(setToken, setUser, navigate);
         } else {

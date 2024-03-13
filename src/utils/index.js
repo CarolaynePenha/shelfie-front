@@ -6,12 +6,19 @@ export function logOut(setToken, setUser, navigate) {
   navigate("/");
 }
 
-export function dateCodateConverter(date) {
-  const startDateObjeto = new Date(date);
-
-  const day = startDateObjeto.getUTCDay();
-  const month = startDateObjeto.getUTCMonth();
-  const year = startDateObjeto.getUTCFullYear();
-  const convertedDate = `${day}/${month}/${year}`;
+export function dateConverterToString(date) {
+  const dateObject = new Date(date);
+  const day = dateObject.getUTCDate();
+  const month = dateObject.getUTCMonth() + 1;
+  const year = dateObject.getUTCFullYear();
+  const formattedDay = day < 10 ? `0${day}` : day;
+  const formattedMonth = month < 10 ? `0${month}` : month;
+  const convertedDate = `${formattedDay}/${formattedMonth}/${year}`;
+  console.log("convertedDate: ", convertedDate);
   return convertedDate;
+}
+
+export function convertToISOString(date) {
+  const dateObject = new Date(date).toISOString();
+  return dateObject;
 }

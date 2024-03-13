@@ -3,6 +3,7 @@ import DatePicker, { registerLocale } from "react-datepicker";
 import br from "date-fns/locale/pt-BR";
 import { useState } from "react";
 import "react-datepicker/dist/react-datepicker.css";
+import { dateConverter } from "../utils";
 registerLocale("br", br);
 
 export default function Calendar({
@@ -42,7 +43,7 @@ export default function Calendar({
           className="confirm"
           onClick={() => {
             setShowCalendar(false);
-            // updateRating();
+            updateRating();
           }}
         >
           ok
