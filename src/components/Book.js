@@ -15,7 +15,11 @@ export default function Book({ book }) {
 
   return book ? (
     <DivBook>
-      <img src={book.bookImage} alt="Capa do livro" />
+      <img
+        onClick={() => navigate(`/bookInfos/${book.id}`)}
+        src={book.bookImage}
+        alt="Capa do livro"
+      />
       <div className="infos">
         <strong>{book.title}</strong>
         <p> {book.author.name}</p>

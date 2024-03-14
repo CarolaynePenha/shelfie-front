@@ -3,11 +3,11 @@ import { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { Rating } from "react-simple-star-rating";
+import { CalendarDays, Undo2 } from "lucide-react";
 
 import TokenContext from "../context/TokenContext";
 import { convertToISOString, dateConverterToString, logOut } from "../utils";
 import UserContext from "../context/UserContext";
-import { CalendarDays, Undo2 } from "lucide-react";
 import Calendar from "./Calendar";
 
 export default function AddBookInShelf() {
@@ -479,6 +479,7 @@ export default function AddBookInShelf() {
                     fillColor="#574145"
                     allowFraction={true}
                     transition={true}
+                    readonly={!editable}
                     size={40}
                     tooltipDefaultText={"Avalie"}
                     showTooltip={true}

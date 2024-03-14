@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import { useNavigate, useParams } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
+import axios from "axios";
 import {
   BookDashed,
   BookDown,
@@ -9,10 +10,10 @@ import {
   Plus,
   Undo2,
 } from "lucide-react";
+import { Rating } from "react-simple-star-rating";
 
 import Footer from "./Footer";
 import TokenContext from "../context/TokenContext";
-import axios from "axios";
 import { logOut } from "../utils";
 import UserContext from "../context/UserContext";
 
@@ -25,7 +26,6 @@ export default function BookInfos() {
   const sizeIcon = 30;
   const existInShelf = { newBook: "newBook", existingBook: "existingBook" };
   const { newBook, existingBook } = existInShelf;
-
   useEffect(() => {
     async function getfBookById() {
       const URL = process.env.REACT_APP_API_URL + `/book/${id}`;
@@ -135,6 +135,23 @@ export default function BookInfos() {
         </section>
         <section className="rating">
           <p>Avaliações</p>
+          {book.totalstars && (
+            <div className="stars">
+              <strong> {book.totalstars}</strong>
+              <Rating
+                fillColor="#574145"
+                allowFraction={true}
+                size={40}
+                readonly={true}
+                initialValue={book.totalstars}
+              />
+            </div>
+          )}
+          {!book.totalstars && (
+            <div className="stars">
+              <p> Livro sem avaliações. </p>
+            </div>
+          )}
         </section>
       </Container>
       <Footer />
@@ -205,15 +222,29 @@ const Container = styled.section`
     padding-top: 40%;
   }
   .rating {
+    height: 15vh;
+    padding-top: 10px;
     background-color: #fde8e9;
     filter: drop-shadow(1px 2px 2px #000000);
     display: flex;
     align-items: flex-start;
     p {
-      width: 100%;
-      padding: 10px;
-      border-bottom: 1px solid #5741457a;
-      font-weight: 600;
+      margin-left: 20px;
+      font-size: 20px;
+    }
+
+    .stars {
+      display: flex;
+      align-items: center;
+      margin-top: 20px;
+      strong {
+        font-weight: 600;
+        font-size: 30px;
+        margin-left: 30px;
+      }
+      span {
+        margin-left: 10;
+      }
     }
   }
 `;

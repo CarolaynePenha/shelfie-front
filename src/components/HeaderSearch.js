@@ -4,15 +4,45 @@ import styled from "styled-components";
 import axios from "axios";
 
 import TokenContext from "../context/TokenContext";
+import SrcContext from "../context/SrcContext";
 import { Search } from "lucide-react";
 import Logo from "./../assets/logo.png";
 
 export default function HeaderSearch({ srcBar, setSrcBar, setBooks }) {
   const { token } = useContext(TokenContext);
+  const { srcInfosArr, setSrcInfosArr } = useContext(SrcContext);
+  let srcArr = [];
 
   useEffect(() => {
     async function search() {
       const URL = process.env.REACT_APP_API_URL + `/srcBar?src=${srcBar}`;
+
+      let index = 0;
+      srcArr = [...srcInfosArr];
+      if (srcBar !== "") {
+        for (let i = 0; i < 10; i++) {
+          console.log("srcArr.length: ", srcArr.length);
+          if (srcArr.length < 10) {
+            srcArr.push(srcBar);
+            setSrcInfosArr(srcArr);
+            const stringifySrcInfosArr = JSON.stringify({
+              srcArr,
+            });
+            localStorage.setItem("srcInfosArr", stringifySrcInfosArr);
+            i = 10;
+          } else {
+            srcArr[index % 10] = srcBar;
+            setSrcInfosArr(srcArr);
+            const stringifySrcInfosArr = JSON.stringify({
+              srcArr,
+            });
+            localStorage.setItem("srcInfosArr", stringifySrcInfosArr);
+            i = 10;
+            index++;
+          }
+        }
+      }
+
       const config = {
         headers: {
           Authorization: `Bearer ${token}`,

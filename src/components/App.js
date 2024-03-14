@@ -12,30 +12,33 @@ import Ranking from "./Ranking";
 import Profile from "./Profile";
 import BookInfos from "./BookInfos";
 import AddBookInShelf from "./AddBookInShelf";
+import { SrcProvider } from "../context/SrcContext";
 
 function App() {
   return (
     <DivApp>
-      <TokenProvider>
-        <UserProvider>
-          <BrowserRouter>
-            <Routes>
-              <Route path="/" element={<SignIn />} />
-              <Route path="/signUp" element={<SignUp />} />
-              <Route path="/shelf" element={<Shelf />} />
-              <Route path="/release" element={<Release />} />
-              <Route path="/search" element={<Search />} />
-              <Route path="/ranking" element={<Ranking />} />
-              <Route path="/profile" element={<Profile />} />
-              <Route path="/bookInfos/:id" element={<BookInfos />} />
-              <Route
-                path="/addBook/:id/:existInShelf"
-                element={<AddBookInShelf />}
-              />
-            </Routes>
-          </BrowserRouter>
-        </UserProvider>
-      </TokenProvider>
+      <SrcProvider>
+        <TokenProvider>
+          <UserProvider>
+            <BrowserRouter>
+              <Routes>
+                <Route path="/" element={<SignIn />} />
+                <Route path="/signUp" element={<SignUp />} />
+                <Route path="/shelf" element={<Shelf />} />
+                <Route path="/release" element={<Release />} />
+                <Route path="/search" element={<Search />} />
+                <Route path="/ranking" element={<Ranking />} />
+                <Route path="/profile" element={<Profile />} />
+                <Route path="/bookInfos/:id" element={<BookInfos />} />
+                <Route
+                  path="/addBook/:id/:existInShelf"
+                  element={<AddBookInShelf />}
+                />
+              </Routes>
+            </BrowserRouter>
+          </UserProvider>
+        </TokenProvider>
+      </SrcProvider>
     </DivApp>
   );
 }

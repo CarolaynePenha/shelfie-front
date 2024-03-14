@@ -4,6 +4,7 @@ import Footer from "./Footer";
 export default function Release() {
   return (
     <Container>
+      <p> Em implementação </p>
       <Footer />
     </Container>
   );
@@ -12,9 +13,10 @@ export default function Release() {
 // -------------css
 const Container = styled.section`
   width: 100%;
-  height: fit-content;
+  height: 100vh;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
+  justify-content: center;
   position: relative;
 `;
