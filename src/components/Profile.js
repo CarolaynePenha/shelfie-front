@@ -54,9 +54,8 @@ export default function Profile() {
         <div className="metrics">
           <div className="metric">
             <p>
-              {" "}
               <strong>{metrics.doneBooks}</strong> livros lidos
-            </p>{" "}
+            </p>
             <BookOpenCheck
               color="#00693e"
               fill="#00693e"
@@ -66,7 +65,6 @@ export default function Profile() {
           </div>
           <div className="metric">
             <p>
-              {" "}
               <strong>{metrics.totalBooks}</strong> livros na estante
             </p>
             <BookMarked

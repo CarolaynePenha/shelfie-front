@@ -3,7 +3,7 @@ import { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { Rating } from "react-simple-star-rating";
-import { CalendarDays, Undo2 } from "lucide-react";
+import { CalendarDays, Heart, Undo2 } from "lucide-react";
 
 import TokenContext from "../context/TokenContext";
 import { convertToISOString, dateConverterToString, logOut } from "../utils";
@@ -34,6 +34,7 @@ export default function AddBookInShelf() {
 
   const [rating, setRating] = useState(0);
   const { token, setToken } = useContext(TokenContext);
+  const [favorite, setFavorite] = useState(false);
 
   const bookTypeMapper = {
     Papel: "paper",
@@ -62,6 +63,7 @@ export default function AddBookInShelf() {
       try {
         const { data } = await axios.get(URL, config);
         setBook(data);
+        setFavorite(data.favorite);
         if (data.status) {
           const typeBook = Object.keys(bookTypeMapper).find(
             (key) => bookTypeMapper[key] === data.type
@@ -204,6 +206,26 @@ export default function AddBookInShelf() {
     }
   }
 
+  async function updateFavoriteBook() {
+    const URL = `${process.env.REACT_APP_API_URL}/shelf/favorite`;
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+
+    const updateInfos = {
+      bookId: book.bookId,
+      favorite: !favorite,
+    };
+    try {
+      await axios.put(URL, updateInfos, config);
+    } catch (err) {
+      console.log(err.response);
+      alert("Algo deu errado, tente novamente");
+    }
+  }
+
   async function updateRating(rate) {
     const URL = `${process.env.REACT_APP_API_URL}/rating`;
     const config = {
@@ -270,6 +292,31 @@ export default function AddBookInShelf() {
       <Container>
         <div className="header">
           <Undo2 onClick={() => navigate(-1)} color="#574145" size={25} />
+          {favorite && (
+            <Heart
+              className="heart-icon"
+              color="#850606"
+              fill="#850606"
+              onClick={() => {
+                updateFavoriteBook();
+                setFavorite(!favorite);
+              }}
+              fillOpacity={1}
+              size={30}
+            />
+          )}
+          {!favorite && (
+            <Heart
+              className="heart-icon"
+              color="#850606"
+              fill="#850606"
+              onClick={() => {
+                updateFavoriteBook();
+              }}
+              fillOpacity={0}
+              size={30}
+            />
+          )}
         </div>
         <img src={book?.bookImage} alt="Capa do livro" />
         {book && existInShelfParams === "newBook" && (
@@ -592,9 +639,13 @@ const Container = styled.section`
     width: 100%;
     background-color: #fde8e9;
     display: flex;
-    justify-content: flex-start;
+    justify-content: space-between;
     padding: 10px;
     border-bottom: 1px solid #5741457a;
+    .heart-icon {
+      margin-top: 20px;
+      margin-right: 20px;
+    }
   }
   img {
     height: 20vh;

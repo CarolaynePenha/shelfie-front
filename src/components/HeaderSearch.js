@@ -21,21 +21,16 @@ export default function HeaderSearch({ srcBar, setSrcBar, setBooks }) {
       srcArr = [...srcInfosArr];
       if (srcBar !== "") {
         for (let i = 0; i < 10; i++) {
-          console.log("srcArr.length: ", srcArr.length);
           if (srcArr.length < 10) {
             srcArr.push(srcBar);
-            setSrcInfosArr(srcArr);
-            const stringifySrcInfosArr = JSON.stringify({
-              srcArr,
-            });
+            setSrcInfosArr([...srcArr]);
+            const stringifySrcInfosArr = JSON.stringify([...srcArr]);
             localStorage.setItem("srcInfosArr", stringifySrcInfosArr);
             i = 10;
           } else {
             srcArr[index % 10] = srcBar;
-            setSrcInfosArr(srcArr);
-            const stringifySrcInfosArr = JSON.stringify({
-              srcArr,
-            });
+            setSrcInfosArr([...srcArr]);
+            const stringifySrcInfosArr = JSON.stringify([...srcArr]);
             localStorage.setItem("srcInfosArr", stringifySrcInfosArr);
             i = 10;
             index++;
