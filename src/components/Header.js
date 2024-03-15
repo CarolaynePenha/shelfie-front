@@ -7,6 +7,7 @@ import { BookOpen } from "lucide-react";
 import { BookOpenCheck } from "lucide-react";
 
 import UserContext from "../context/UserContext";
+import { useNavigate } from "react-router-dom";
 
 export default function Header({
   search,
@@ -16,6 +17,7 @@ export default function Header({
   getShelfBooks,
 }) {
   const { user } = useContext(UserContext);
+  const navigate = useNavigate();
 
   return (
     <DivHeader>
@@ -23,7 +25,7 @@ export default function Header({
         <p>
           <strong>Minha Estante</strong>
         </p>
-        <img src={user.image} />
+        <img onClick={() => navigate("/profile")} src={user.image} />
       </div>
       <form onSubmit={search}>
         <div className="div-src">

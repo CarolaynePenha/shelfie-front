@@ -1,16 +1,21 @@
 import { useContext } from "react";
 import styled from "styled-components";
-
-import { LogOut } from "lucide-react";
-
-import Logo from "./../assets/logo.png";
+import { useNavigate } from "react-router-dom";
 import UserContext from "../context/UserContext";
 
+import { LogOut } from "lucide-react";
+import Logo from "./../assets/logo.png";
+import { logOut } from "../utils";
+import TokenContext from "../context/TokenContext";
+
 export default function HeaderProfile() {
-  const { user } = useContext(UserContext);
+  const { user, setUser } = useContext(UserContext);
+  const navigate = useNavigate();
+  const { setToken } = useContext(TokenContext);
   return (
     <DivHeader>
       <LogOut
+        onClick={() => logOut(setToken, setUser, navigate)}
         className="icon-logout"
         color="#574145"
         fill="#574145"

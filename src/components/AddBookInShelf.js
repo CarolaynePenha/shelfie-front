@@ -66,7 +66,6 @@ export default function AddBookInShelf() {
       };
       try {
         const { data } = await axios.get(URL, config);
-        console.log("data: ", data);
         setBook(data);
 
         if (data.status) {
@@ -134,7 +133,7 @@ export default function AddBookInShelf() {
     try {
       const { data } = await axios.post(
         URL,
-        { ...infosPost, type, status },
+        { ...infosPost, type, status, favorite },
         config
       );
       if (infosPost.status === "Lido") {
@@ -298,26 +297,35 @@ export default function AddBookInShelf() {
       <Container>
         <div className="header">
           <Undo2 onClick={() => navigate(-1)} color="#574145" size={25} />
-          {favorite && (
+          {favorite && infosPost.status === "Lido" && (
             <Heart
               className="heart-icon"
               color="#850606"
               fill="#850606"
               onClick={() => {
-                updateFavoriteBook();
-                setFavorite(!favorite);
+                if (existInShelfParams === "newBook") {
+                  setFavorite(!favorite);
+                } else {
+                  updateFavoriteBook();
+                  setFavorite(!favorite);
+                }
               }}
               fillOpacity={1}
               size={30}
             />
           )}
-          {!favorite && (
+          {!favorite && infosPost.status === "Lido" && (
             <Heart
               className="heart-icon"
               color="#850606"
               fill="#850606"
               onClick={() => {
-                updateFavoriteBook();
+                if (existInShelfParams === "newBook") {
+                  setFavorite(!favorite);
+                } else {
+                  updateFavoriteBook();
+                  setFavorite(!favorite);
+                }
               }}
               fillOpacity={0}
               size={30}

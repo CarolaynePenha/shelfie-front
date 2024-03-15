@@ -132,7 +132,7 @@ const Container = styled.section`
   .metrics {
     width: 100%;
     margin-top: 20vh;
-    background-color: #fde8e9;
+    background-color: #ffffff;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
