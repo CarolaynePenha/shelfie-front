@@ -65,9 +65,7 @@ export default function BookInfos() {
           {book.status === "done" ? (
             <BookOpenCheck
               className="icon-status"
-              onClick={() =>
-                navigate(`/addBook/${book.bookId}/${existingBook}`)
-              }
+              onClick={() => navigate(`/addBook/${book.id}/${existingBook}`)}
               color="#00693e"
               fill="#00693e"
               fillOpacity={0.5}
@@ -76,9 +74,7 @@ export default function BookInfos() {
           ) : book.status === "reading" ? (
             <BookOpen
               className="icon-status"
-              onClick={() =>
-                navigate(`/addBook/${book.bookId}/${existingBook}`)
-              }
+              onClick={() => navigate(`/addBook/${book.id}/${existingBook}`)}
               color="#f3b93f"
               fill="#f3b93f"
               fillOpacity={0.5}
@@ -87,18 +83,14 @@ export default function BookInfos() {
           ) : book.status === "wish" ? (
             <BookDashed
               className="icon-status"
-              onClick={() =>
-                navigate(`/addBook/${book.bookId}/${existingBook}`)
-              }
+              onClick={() => navigate(`/addBook/${book.id}/${existingBook}`)}
               color="#175676"
               size={sizeIcon}
             />
           ) : book.status === "abandoned" ? (
             <BookDown
               className="icon-status"
-              onClick={() =>
-                navigate(`/addBook/${book.bookId}/${existingBook}`)
-              }
+              onClick={() => navigate(`/addBook/${book.id}/${existingBook}`)}
               color="#000000"
               fill="#000000"
               fillOpacity={0.5}
@@ -107,9 +99,7 @@ export default function BookInfos() {
           ) : book.status === "rereading" ? (
             <BookOpen
               className="icon-status"
-              onClick={() =>
-                navigate(`/addBook/${book.bookId}/${existingBook}`)
-              }
+              onClick={() => navigate(`/addBook/${book.id}/${existingBook}`)}
               color="#df6d2f"
               fill="#df6d2f"
               fillOpacity={0.5}
@@ -118,14 +108,14 @@ export default function BookInfos() {
           ) : (
             <Plus
               className="icon-status"
-              onClick={() => navigate(`/addBook/${book.bookId}/${newBook}`)}
+              onClick={() => navigate(`/addBook/${book.id}/${newBook}`)}
               color="#574145"
               size={sizeIcon}
             />
           )}
           <div className="book-infos">
             <strong>{book.title}</strong>
-            <small>{book?.author?.name}</small>
+            <small>{book?.name}</small>
           </div>
           <div className="reading-data">
             <p>x leram </p>

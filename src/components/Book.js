@@ -25,7 +25,7 @@ export default function Book({ book }) {
         <p> {book.author.name}</p>
         <p>{book.totalPages} páginas</p>
 
-        {book.shelf[0]?.status === "done" ? (
+        {book.status === "done" ? (
           <div className="status">
             <BookOpenCheck
               onClick={() => navigate(`/addBook/${book.id}/${existingBook}`)}
@@ -35,7 +35,7 @@ export default function Book({ book }) {
               size={25}
             />
           </div>
-        ) : book.shelf[0]?.status === "reading" ? (
+        ) : book.status === "reading" ? (
           <div className="status">
             <BookOpen
               onClick={() => navigate(`/addBook/${book.id}/${existingBook}`)}
@@ -45,7 +45,7 @@ export default function Book({ book }) {
               size={25}
             />
           </div>
-        ) : book.shelf[0]?.status === "wish" ? (
+        ) : book.status === "wish" ? (
           <div className="status">
             <BookDashed
               onClick={() => navigate(`/addBook/${book.id}/${existingBook}`)}
@@ -53,7 +53,7 @@ export default function Book({ book }) {
               size={25}
             />
           </div>
-        ) : book.shelf[0]?.status === "abandoned" ? (
+        ) : book.status === "abandoned" ? (
           <div className="status">
             <BookDown
               onClick={() => navigate(`/addBook/${book.id}/${existingBook}`)}
@@ -63,7 +63,7 @@ export default function Book({ book }) {
               size={25}
             />
           </div>
-        ) : book.shelf[0]?.status === "rereading" ? (
+        ) : book.status === "rereading" ? (
           <div className="status">
             <BookOpen
               onClick={() => navigate(`/addBook/${book.id}/${existingBook}`)}

@@ -53,17 +53,22 @@ export default function AddBookInShelf() {
 
   useEffect(() => {
     async function getBookById() {
-      const URL = process.env.REACT_APP_API_URL + `/book/${id}`;
+      let URL;
+      if (existInShelfParams === "newBook") {
+        URL = process.env.REACT_APP_API_URL + `/book/${id}`;
+      } else {
+        URL = process.env.REACT_APP_API_URL + `/shelf/${id}`;
+      }
       const config = {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       };
-
       try {
         const { data } = await axios.get(URL, config);
+        console.log("data: ", data);
         setBook(data);
-        setFavorite(data.favorite);
+
         if (data.status) {
           const typeBook = Object.keys(bookTypeMapper).find(
             (key) => bookTypeMapper[key] === data.type
@@ -77,6 +82,7 @@ export default function AddBookInShelf() {
             type: typeBook,
             iHave: data.iHave,
           });
+          setFavorite(data.favorite);
         }
         if (existInShelfParams === "newBook") {
           setRatingInfos({
