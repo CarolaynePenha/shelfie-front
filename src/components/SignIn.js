@@ -1,12 +1,13 @@
 import styled from "styled-components";
 import { useContext, useEffect, useState } from "react";
 import axios from "axios";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Eye } from "lucide-react";
 import { EyeOff } from "lucide-react";
 
 import TokenContext from "../context/TokenContext";
 import Logo from "./../assets/logo.png";
+import BooksImg from "./../assets/books.png";
 import Loading from "./Loading";
 import UserContext from "../context/UserContext";
 
@@ -70,55 +71,60 @@ export default function SignIn() {
 
   return (
     <Container>
-      <img src={Logo} alt="Logo" />
-      <Form onSubmit={post}>
-        <input
-          disabled={buttonState}
-          required
-          placeholder="e-mail"
-          value={email}
-          onChange={(e) =>
-            setinfosLogin({ ...infosLogin, email: e.target.value })
-          }
-        />
-        <div className="div-password">
+      <div className="books-img">
+        <img src={BooksImg} alt="books" />
+      </div>
+      <section>
+        <img src={Logo} alt="Logo" />
+        <Form onSubmit={post}>
           <input
             disabled={buttonState}
-            type={type.passwordType}
             required
-            placeholder="senha"
-            value={password}
+            placeholder="e-mail"
+            value={email}
             onChange={(e) =>
-              setinfosLogin({ ...infosLogin, password: e.target.value })
+              setinfosLogin({ ...infosLogin, email: e.target.value })
             }
           />
-          {type.eyeType === "Eye" ? (
-            <Eye
-              onClick={() => togglePasswordVisibility("password")}
-              className="eye"
-              color="#574145"
-              size={25}
+          <div className="div-password">
+            <input
+              disabled={buttonState}
+              type={type.passwordType}
+              required
+              placeholder="senha"
+              value={password}
+              onChange={(e) =>
+                setinfosLogin({ ...infosLogin, password: e.target.value })
+              }
             />
-          ) : (
-            <EyeOff
-              onClick={() => togglePasswordVisibility("password")}
-              className="eye"
-              color="#574145"
-              size={25}
-            />
-          )}
-        </div>
+            {type.eyeType === "Eye" ? (
+              <Eye
+                onClick={() => togglePasswordVisibility("password")}
+                className="eye"
+                color="#574145"
+                size={25}
+              />
+            ) : (
+              <EyeOff
+                onClick={() => togglePasswordVisibility("password")}
+                className="eye"
+                color="#574145"
+                size={25}
+              />
+            )}
+          </div>
 
-        <button disabled={buttonState} type="submit" className="save-button">
-          {buttonLoading}
-        </button>
-      </Form>
+          <button disabled={buttonState} type="submit" className="save-button">
+            {buttonLoading}
+          </button>
+        </Form>
 
-      <ButtonRegisterLogin disabled={buttonState}>
-        <p onClick={() => navigate("/signUp")}>
-          Não tem uma conta? Cadastre-se!
-        </p>
-      </ButtonRegisterLogin>
+        <ButtonRegisterLogin disabled={buttonState}>
+          <p onClick={() => navigate("/signUp")}>
+            Não tem uma conta? Cadastre-se!
+          </p>
+        </ButtonRegisterLogin>
+      </section>
     </Container>
   );
 }
@@ -126,15 +132,39 @@ export default function SignIn() {
 // -------------------------------------css
 export const Container = styled.div`
   width: 100%;
-  height: fit-content;
   min-height: 100vh;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  position: relative;
+  section {
+    min-height: 100vh;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
   img {
     width: 300px;
+  }
+  .books-img {
+    display: none;
+  }
+  @media (min-width: 800px) {
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    section {
+      width: 50%;
+    }
+    .books-img {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 50%;
+      img {
+        width: 90%;
+      }
+    }
   }
 `;
 
@@ -149,7 +179,7 @@ export const ButtonRegisterLogin = styled.button`
   }
   @media (min-width: 600px) {
     p {
-      font-size: 22px;
+      font-size: 20px;
     }
   }
   @media (min-width: 1500px) {
@@ -207,21 +237,21 @@ export const Form = styled.form`
 
   @media (min-width: 600px) {
     input {
-      height: 70px;
-      font-size: 22px;
+      height: 60px;
+      font-size: 20px;
     }
     .save-button {
-      height: 70px;
-      font-size: 22px;
+      height: 60px;
+      font-size: 20px;
     }
   }
   @media (min-width: 1500px) {
     input {
-      height: 85px;
+      height: 70px;
       font-size: 26px;
     }
     .save-button {
-      height: 85px;
+      height: 70px;
       font-size: 26px;
     }
   }

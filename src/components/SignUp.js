@@ -1,11 +1,12 @@
 import styled from "styled-components";
 import { useState } from "react";
 import axios from "axios";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Eye } from "lucide-react";
 import { EyeOff } from "lucide-react";
 
 import Logo from "./../assets/logo.png";
+import BooksImg from "./../assets/books.png";
 import Loading from "./Loading";
 import { ButtonRegisterLogin, Container, Form } from "./SignIn";
 
@@ -114,114 +115,119 @@ export default function SignUp() {
 
   return (
     <Container>
-      <img src={Logo} alt="Logo" />
-      <Form
-        onSubmit={releaseFormSubmission}
-        passwordMatchError={passwordMatchError}
-      >
-        <input
-          type="text"
-          disabled={buttonState}
-          required
-          placeholder="name"
-          value={name}
-          onChange={(e) =>
-            setInfosSignUp({ ...infosSignUp, name: e.target.value })
-          }
-        ></input>
-        <input
-          type="url"
-          disabled={buttonState}
-          required
-          placeholder="Imagem ex: https://i.pinimg.com/..."
-          value={image}
-          onChange={(e) =>
-            setInfosSignUp({ ...infosSignUp, image: e.target.value })
-          }
-        ></input>
-        <input
-          disabled={buttonState}
-          required
-          placeholder="e-mail"
-          value={email}
-          onChange={(e) =>
-            setInfosSignUp({ ...infosSignUp, email: e.target.value })
-          }
-        />
-        <div className="div-password">
+      <div className="books-img">
+        <img src={BooksImg} alt="books" />
+      </div>
+      <section>
+        <img src={Logo} alt="Logo" />
+        <Form
+          onSubmit={releaseFormSubmission}
+          passwordMatchError={passwordMatchError}
+        >
           <input
-            className="password-input"
+            type="text"
             disabled={buttonState}
-            type={type.passwordType}
             required
-            placeholder="senha"
-            pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,15}"
-            value={password}
-            onChange={handleChange}
+            placeholder="name"
+            value={name}
+            onChange={(e) =>
+              setInfosSignUp({ ...infosSignUp, name: e.target.value })
+            }
+          ></input>
+          <input
+            type="url"
+            disabled={buttonState}
+            required
+            placeholder="Imagem ex: https://i.pinimg.com/..."
+            value={image}
+            onChange={(e) =>
+              setInfosSignUp({ ...infosSignUp, image: e.target.value })
+            }
+          ></input>
+          <input
+            disabled={buttonState}
+            required
+            placeholder="e-mail"
+            value={email}
+            onChange={(e) =>
+              setInfosSignUp({ ...infosSignUp, email: e.target.value })
+            }
           />
-
-          {type.eyeTypePassword === "Eye" ? (
-            <Eye
-              onClick={() => togglePasswordVisibility("password")}
-              className="eye"
-              color="#574145"
-              size={25}
+          <div className="div-password">
+            <input
+              className="password-input"
+              disabled={buttonState}
+              type={type.passwordType}
+              required
+              placeholder="senha"
+              pattern="(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,15}"
+              value={password}
+              onChange={handleChange}
             />
-          ) : (
-            <EyeOff
-              onClick={() => togglePasswordVisibility("password")}
-              className="eye"
-              color="#574145"
-              size={25}
-            />
-          )}
-        </div>
 
-        <DivPasswordMessage>
-          {messagedisplay &&
-            ` A senha deve ter entre 8 e 15 caracteres, sendo ao menos uma letra
+            {type.eyeTypePassword === "Eye" ? (
+              <Eye
+                onClick={() => togglePasswordVisibility("password")}
+                className="eye"
+                color="#574145"
+                size={25}
+              />
+            ) : (
+              <EyeOff
+                onClick={() => togglePasswordVisibility("password")}
+                className="eye"
+                color="#574145"
+                size={25}
+              />
+            )}
+          </div>
+
+          <DivPasswordMessage>
+            {messagedisplay &&
+              ` A senha deve ter entre 8 e 15 caracteres, sendo ao menos uma letra
           maiúscula, uma minuscula, um número e um caractere especial(@$!%*?&)`}
-        </DivPasswordMessage>
+          </DivPasswordMessage>
 
-        <div className="div-password">
-          <input
-            className="repeat-password"
-            disabled={buttonState}
-            type={type.repeatPasswordType}
-            required
-            placeholder="repita a senha"
-            value={repeatPassword}
-            onChange={handleChange}
-          />
-
-          {type.eyeTypeRepeatPassword === "Eye" ? (
-            <Eye
-              onClick={() => togglePasswordVisibility("repeat-password")}
-              className="eye"
-              color="#574145"
-              size={25}
+          <div className="div-password">
+            <input
+              className="repeat-password"
+              disabled={buttonState}
+              type={type.repeatPasswordType}
+              required
+              placeholder="repita a senha"
+              value={repeatPassword}
+              onChange={handleChange}
             />
-          ) : (
-            <EyeOff
-              onClick={() => togglePasswordVisibility("repeat-password")}
-              className="eye"
-              color="#574145"
-              size={25}
-            />
-          )}
-        </div>
 
-        <DivErrorMessage>
-          {passwordMatchError && "As senhas não correspondem"}
-        </DivErrorMessage>
+            {type.eyeTypeRepeatPassword === "Eye" ? (
+              <Eye
+                onClick={() => togglePasswordVisibility("repeat-password")}
+                className="eye"
+                color="#574145"
+                size={25}
+              />
+            ) : (
+              <EyeOff
+                onClick={() => togglePasswordVisibility("repeat-password")}
+                className="eye"
+                color="#574145"
+                size={25}
+              />
+            )}
+          </div>
 
-        <button disabled={buttonState} type="submit" className="save-button">
-          {buttonLoading}
-        </button>
-      </Form>
-      <ButtonRegisterLogin disabled={buttonState}>
-        <p onClick={() => navigate("/")}> Já tem uma conta? Faça Login!</p>
-      </ButtonRegisterLogin>
+          <DivErrorMessage>
+            {passwordMatchError && "As senhas não correspondem"}
+          </DivErrorMessage>
+
+          <button disabled={buttonState} type="submit" className="save-button">
+            {buttonLoading}
+          </button>
+        </Form>
+        <ButtonRegisterLogin disabled={buttonState}>
+          <p onClick={() => navigate("/")}> Já tem uma conta? Faça Login!</p>
+        </ButtonRegisterLogin>
+      </section>
     </Container>
   );
 }
