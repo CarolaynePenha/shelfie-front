@@ -7,6 +7,7 @@ import {
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import { Tooltip } from "react-tooltip";
 
 export default function Book({ book }) {
   const navigate = useNavigate();
@@ -27,7 +28,10 @@ export default function Book({ book }) {
 
         {book.status === "done" ? (
           <div className="status">
+            <Tooltip id="done-books" />
             <BookOpenCheck
+              data-tooltip-id="done-books"
+              data-tooltip-content="Lido"
               onClick={() => navigate(`/addBook/${book.id}/${existingBook}`)}
               color="#00693e"
               fill="#00693e"
@@ -37,7 +41,10 @@ export default function Book({ book }) {
           </div>
         ) : book.status === "reading" ? (
           <div className="status">
+            <Tooltip id="reading-books" />
             <BookOpen
+              data-tooltip-id="reading-books"
+              data-tooltip-content="Lendo"
               onClick={() => navigate(`/addBook/${book.id}/${existingBook}`)}
               color="#f3b93f"
               fill="#f3b93f"
@@ -47,7 +54,10 @@ export default function Book({ book }) {
           </div>
         ) : book.status === "wish" ? (
           <div className="status">
+            <Tooltip id="wish-books" />
             <BookDashed
+              data-tooltip-id="wish-books"
+              data-tooltip-content="Quero ler"
               onClick={() => navigate(`/addBook/${book.id}/${existingBook}`)}
               color="#175676"
               size={25}
@@ -55,7 +65,10 @@ export default function Book({ book }) {
           </div>
         ) : book.status === "abandoned" ? (
           <div className="status">
+            <Tooltip id="abandoned-books" />
             <BookDown
+              data-tooltip-id="abandoned-books"
+              data-tooltip-content="Abandonado"
               onClick={() => navigate(`/addBook/${book.id}/${existingBook}`)}
               color="#000000"
               fill="#000000"
@@ -65,7 +78,10 @@ export default function Book({ book }) {
           </div>
         ) : book.status === "rereading" ? (
           <div className="status">
+            <Tooltip id="rereading-books" />
             <BookOpen
+              data-tooltip-id="rereading-books"
+              data-tooltip-content="Relendo"
               onClick={() => navigate(`/addBook/${book.id}/${existingBook}`)}
               color="#df6d2f"
               fill="#df6d2f"
@@ -75,7 +91,10 @@ export default function Book({ book }) {
           </div>
         ) : (
           <div className="status">
+            <Tooltip id="add-books" />
             <Plus
+              data-tooltip-id="add-books"
+              data-tooltip-content="Adicionar"
               onClick={() => navigate(`/addBook/${book.id}/${newBook}`)}
               color="#574145"
               size={25}

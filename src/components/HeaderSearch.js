@@ -2,16 +2,21 @@ import { useContext, useEffect } from "react";
 import { DebounceInput } from "react-debounce-input";
 import styled from "styled-components";
 import axios from "axios";
+import { Search } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 import TokenContext from "../context/TokenContext";
 import SrcContext from "../context/SrcContext";
-import { Search } from "lucide-react";
 import Logo from "./../assets/logo.png";
+import { logOut } from "../utils";
+import UserContext from "../context/UserContext";
 
 export default function HeaderSearch({ srcBar, setSrcBar, setBooks }) {
-  const { token } = useContext(TokenContext);
+  const { token, setToken } = useContext(TokenContext);
   const { srcInfosArr, setSrcInfosArr } = useContext(SrcContext);
+  const { setUser } = useContext(UserContext);
   let srcArr = [];
+  const navigate = useNavigate();
 
   useEffect(() => {
     async function search() {
@@ -37,18 +42,24 @@ export default function HeaderSearch({ srcBar, setSrcBar, setBooks }) {
           }
         }
       }
-
       const config = {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       };
+
       try {
         const { data } = await axios.get(URL, config);
         setBooks(data);
       } catch (err) {
+        console.log("err: ", err);
         console.log(err.response);
-        alert("Houve um erro ao realizar sua busca!");
+        if (err.response?.status === 401) {
+          alert("Usuário inválido, faça login novamente");
+          logOut(setToken, setUser, navigate);
+        } else {
+          alert("Houve um erro na realizar sua busca!");
+        }
       }
     }
     search();

@@ -11,6 +11,7 @@ import {
   Undo2,
 } from "lucide-react";
 import { Rating } from "react-simple-star-rating";
+import { Tooltip } from "react-tooltip";
 
 import Footer from "./Footer";
 import TokenContext from "../context/TokenContext";
@@ -26,6 +27,7 @@ export default function BookInfos() {
   const sizeIcon = 30;
   const existInShelf = { newBook: "newBook", existingBook: "existingBook" };
   const { newBook, existingBook } = existInShelf;
+
   useEffect(() => {
     async function getfBookById() {
       const URL = process.env.REACT_APP_API_URL + `/book/${id}`;
@@ -53,6 +55,7 @@ export default function BookInfos() {
     }
     getfBookById();
   }, []);
+  console.log("metricDone", book.metricDone);
 
   return (
     <>
@@ -60,10 +63,15 @@ export default function BookInfos() {
         <div className="header">
           <Undo2 onClick={() => navigate(-1)} color="#574145" size={25} />
         </div>
-        <section className="div-img">
+        <div className="div-img">
           <img src={book.bookImage} alt="capa do livro" />
-          {book.status === "done" ? (
+        </div>
+        {book.status === "done" ? (
+          <>
+            <Tooltip id="done-books" />
             <BookOpenCheck
+              data-tooltip-id="done-books"
+              data-tooltip-content="Lido"
               className="icon-status"
               onClick={() => navigate(`/addBook/${book.id}/${existingBook}`)}
               color="#00693e"
@@ -71,8 +79,13 @@ export default function BookInfos() {
               fillOpacity={0.5}
               size={sizeIcon}
             />
-          ) : book.status === "reading" ? (
+          </>
+        ) : book.status === "reading" ? (
+          <>
+            <Tooltip id="reading-books" />
             <BookOpen
+              data-tooltip-id="reading-books"
+              data-tooltip-content="Lendo"
               className="icon-status"
               onClick={() => navigate(`/addBook/${book.id}/${existingBook}`)}
               color="#f3b93f"
@@ -80,15 +93,25 @@ export default function BookInfos() {
               fillOpacity={0.5}
               size={sizeIcon}
             />
-          ) : book.status === "wish" ? (
+          </>
+        ) : book.status === "wish" ? (
+          <>
+            <Tooltip id="wish-books" />
             <BookDashed
+              data-tooltip-id="wish-books"
+              data-tooltip-content="Quero ler"
               className="icon-status"
               onClick={() => navigate(`/addBook/${book.id}/${existingBook}`)}
               color="#175676"
               size={sizeIcon}
             />
-          ) : book.status === "abandoned" ? (
+          </>
+        ) : book.status === "abandoned" ? (
+          <>
+            <Tooltip id="abandoned-books" />
             <BookDown
+              data-tooltip-id="abandoned-books"
+              data-tooltip-content="Abandonado"
               className="icon-status"
               onClick={() => navigate(`/addBook/${book.id}/${existingBook}`)}
               color="#000000"
@@ -96,8 +119,13 @@ export default function BookInfos() {
               fillOpacity={0.5}
               size={sizeIcon}
             />
-          ) : book.status === "rereading" ? (
+          </>
+        ) : book.status === "rereading" ? (
+          <>
+            <Tooltip id="rereading-books" />
             <BookOpen
+              data-tooltip-id="rereading-books"
+              data-tooltip-content="Relendo"
               className="icon-status"
               onClick={() => navigate(`/addBook/${book.id}/${existingBook}`)}
               color="#df6d2f"
@@ -105,24 +133,55 @@ export default function BookInfos() {
               fillOpacity={0.5}
               size={25}
             />
-          ) : (
+          </>
+        ) : (
+          <>
+            <Tooltip id="add-books" />
             <Plus
+              data-tooltip-id="add-books"
+              data-tooltip-content="Adicionar"
               className="icon-status"
               onClick={() => navigate(`/addBook/${book.id}/${newBook}`)}
               color="#574145"
               size={sizeIcon}
             />
+          </>
+        )}
+        <div className="book-infos">
+          <strong>{book.title}</strong>
+          <p>{book?.name}</p>
+          <small> {book.metricDone} Avaliações </small>
+        </div>
+        <div className="reading-data">
+          {book.metricDone >= 2 ? (
+            <p>
+              <strong>{book.metricDone}</strong> Leram{" "}
+            </p>
+          ) : (
+            <p>
+              <strong>{book.metricDone}</strong> Leu{" "}
+            </p>
           )}
-          <div className="book-infos">
-            <strong>{book.title}</strong>
-            <small>{book?.name}</small>
-          </div>
-          <div className="reading-data">
-            <p>x leram </p>
-            <p>x querem ler</p>
-            <p>x lendo</p>
-          </div>
-        </section>
+          {book.metricWish >= 2 ? (
+            <p>
+              <strong>{book.metricWish}</strong> Querem ler
+            </p>
+          ) : (
+            <p>
+              <strong>{book.metricWish}</strong> Quer ler
+            </p>
+          )}
+          {book.metricReading >= 2 ? (
+            <p>
+              <strong>{book.metricReading}</strong> Lendo
+            </p>
+          ) : (
+            <p>
+              <strong>{book.metricReading}</strong> Lendo
+            </p>
+          )}
+        </div>
+
         <section className="rating">
           <p>Avaliações</p>
           {book.totalstars && (
@@ -155,7 +214,6 @@ const Container = styled.section`
   height: fit-content;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
   position: relative;
   .header {
     height: 19vh;
@@ -177,7 +235,7 @@ const Container = styled.section`
   .icon-status {
     position: fixed;
     top: 22vh;
-    right: 50;
+    right: 20vw;
   }
 
   .book-infos {
@@ -190,8 +248,13 @@ const Container = styled.section`
     strong {
       font-weight: 600;
       padding: 10px;
+      font-size: 18px;
     }
     small {
+      padding-bottom: 15px;
+      font-size: 14px;
+    }
+    p {
       padding-bottom: 15px;
     }
   }
@@ -202,31 +265,40 @@ const Container = styled.section`
     justify-content: space-evenly;
     align-items: center;
     border: 1px solid #5741457a;
+    background-color: #ffffff;
+    strong {
+      font-weight: 600;
+    }
   }
   img {
     height: 25vh;
     position: fixed;
     top: 10vh;
+    right: 38vw;
   }
   .div-img {
-    padding-top: 40%;
+    padding-top: 35%;
   }
   .rating {
     height: 15vh;
     padding-top: 10px;
-    background-color: #fde8e9;
+    background-color: #ffffff;
     filter: drop-shadow(1px 2px 2px #000000);
     display: flex;
     align-items: flex-start;
     p {
       margin-left: 20px;
       font-size: 20px;
+      font-weight: 600;
     }
 
     .stars {
       display: flex;
       align-items: center;
       margin-top: 20px;
+      p {
+        font-weight: 400;
+      }
       strong {
         font-weight: 600;
         font-size: 30px;

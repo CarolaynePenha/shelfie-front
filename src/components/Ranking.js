@@ -6,10 +6,15 @@ import Footer from "./Footer";
 import HeaderProfile from "./HeaderProfile";
 import TokenContext from "../context/TokenContext";
 import { Rating } from "react-simple-star-rating";
+import { logOut } from "../utils";
+import UserContext from "../context/UserContext";
+import { useNavigate } from "react-router-dom";
 
 export default function Ranking() {
-  const { token } = useContext(TokenContext);
+  const { token, setToken } = useContext(TokenContext);
+  const { setUser } = useContext(UserContext);
   const [ranking, setRanking] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     async function getBookById() {
@@ -24,8 +29,13 @@ export default function Ranking() {
         setRanking(data);
       } catch (err) {
         console.log("err: ", err);
-        console.log("error.response", err.response);
-        alert("Houve um erro ao realizar sua busca!");
+        console.log(err.response);
+        if (err.response?.status === 401) {
+          alert("Usuário inválido, faça login novamente");
+          logOut(setToken, setUser, navigate);
+        } else {
+          alert("Houve um erro na realizar sua busca!");
+        }
       }
     }
     getBookById();

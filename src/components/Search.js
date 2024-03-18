@@ -40,7 +40,7 @@ export default function Search() {
               />
             </div>
             {srcInfosArr.map((src) => (
-              <div className="src-and-icon">
+              <div onClick={() => setSrcBar(src)} className="src-and-icon">
                 <SearchIcon
                   color="#574145"
                   fill="#574145"

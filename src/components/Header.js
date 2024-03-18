@@ -5,9 +5,10 @@ import { BookMarked } from "lucide-react";
 import { BookDashed } from "lucide-react";
 import { BookOpen } from "lucide-react";
 import { BookOpenCheck } from "lucide-react";
+import { Tooltip } from "react-tooltip";
+import { useNavigate } from "react-router-dom";
 
 import UserContext from "../context/UserContext";
-import { useNavigate } from "react-router-dom";
 
 export default function Header({
   search,
@@ -41,14 +42,20 @@ export default function Header({
         </div>
       </form>
       <div className="book-marker">
+        <Tooltip id="all-books" />
         <BookMarked
+          data-tooltip-id="all-books"
+          data-tooltip-content="Todos"
           onClick={() => setGetShelfBooks(!getShelfBooks)}
           color="#574145"
           fill="#574145"
           fillOpacity={0.5}
           size={25}
         />
+        <Tooltip id="done-books" />
         <BookOpenCheck
+          data-tooltip-id="done-books"
+          data-tooltip-content="Lidos"
           onClick={(e) => {
             search(e, "done");
           }}
@@ -57,7 +64,10 @@ export default function Header({
           fillOpacity={0.5}
           size={25}
         />
+        <Tooltip id="reading-books" />
         <BookOpen
+          data-tooltip-id="reading-books"
+          data-tooltip-content="Lendo"
           onClick={(e) => {
             search(e, "reading");
           }}
@@ -66,14 +76,20 @@ export default function Header({
           fillOpacity={0.5}
           size={25}
         />
+        <Tooltip id="wish-books" />
         <BookDashed
+          data-tooltip-id="wish-books"
+          data-tooltip-content="Quero ler"
           onClick={(e) => {
             search(e, "wish");
           }}
           color="#175676"
           size={25}
         />
+        <Tooltip id="rereading-books" />
         <BookOpen
+          data-tooltip-id="rereading-books"
+          data-tooltip-content="Relendo"
           onClick={(e) => {
             search(e, "rereading");
           }}
@@ -82,7 +98,10 @@ export default function Header({
           fillOpacity={0.5}
           size={25}
         />
+        <Tooltip id="abandoned-books" />
         <BookDown
+          data-tooltip-id="abandoned-books"
+          data-tooltip-content="Abandonados"
           onClick={(e) => {
             search(e, "abandoned");
           }}
@@ -91,7 +110,10 @@ export default function Header({
           fillOpacity={0.5}
           size={25}
         />
+        <Tooltip id="favorite-books" />
         <BookHeart
+          data-tooltip-id="favorite-books"
+          data-tooltip-content="Favoritos"
           onClick={(e) => {
             search(e, "favorite");
           }}
