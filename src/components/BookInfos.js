@@ -55,7 +55,6 @@ export default function BookInfos() {
     }
     getfBookById();
   }, []);
-  console.log("metricDone", book.metricDone);
 
   return (
     <>

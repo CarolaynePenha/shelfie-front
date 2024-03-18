@@ -32,7 +32,10 @@ export default function Search() {
             <div className="src-top">
               <strong>Suas pesquisas recentes </strong>
               <Trash
-                onClick={() => setSrcInfosArr([])}
+                onClick={() => {
+                  setSrcInfosArr([]);
+                  localStorage.removeItem("srcInfosArr");
+                }}
                 color="#574145"
                 fill="#574145"
                 fillOpacity={0.5}

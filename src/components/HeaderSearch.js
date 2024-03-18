@@ -10,35 +10,35 @@ import SrcContext from "../context/SrcContext";
 import Logo from "./../assets/logo.png";
 import { logOut } from "../utils";
 import UserContext from "../context/UserContext";
+import { useState } from "react";
 
 export default function HeaderSearch({ srcBar, setSrcBar, setBooks }) {
   const { token, setToken } = useContext(TokenContext);
   const { srcInfosArr, setSrcInfosArr } = useContext(SrcContext);
   const { setUser } = useContext(UserContext);
+  const [index, setIndex] = useState(9);
   let srcArr = [];
   const navigate = useNavigate();
 
   useEffect(() => {
     async function search() {
       const URL = process.env.REACT_APP_API_URL + `/srcBar?src=${srcBar}`;
-
-      let index = 0;
       srcArr = [...srcInfosArr];
       if (srcBar !== "") {
         for (let i = 0; i < 10; i++) {
           if (srcArr.length < 10) {
-            srcArr.push(srcBar);
+            srcArr.unshift(srcBar);
             setSrcInfosArr([...srcArr]);
             const stringifySrcInfosArr = JSON.stringify([...srcArr]);
             localStorage.setItem("srcInfosArr", stringifySrcInfosArr);
             i = 10;
           } else {
-            srcArr[index % 10] = srcBar;
-            setSrcInfosArr([...srcArr]);
+            srcArr.pop();
+            srcArr.unshift(srcBar);
+            i = 10;
             const stringifySrcInfosArr = JSON.stringify([...srcArr]);
             localStorage.setItem("srcInfosArr", stringifySrcInfosArr);
-            i = 10;
-            index++;
+            setSrcInfosArr([...srcArr]);
           }
         }
       }
@@ -72,7 +72,7 @@ export default function HeaderSearch({ srcBar, setSrcBar, setBooks }) {
         <DebounceInput
           minLength={3}
           className="debounce-input"
-          debounceTimeout={500}
+          debounceTimeout={700}
           placeholder={"Pesquise por livros"}
           onChange={(event) => setSrcBar(event.target.value)}
         />
