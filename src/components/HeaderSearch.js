@@ -109,10 +109,11 @@ const DivHeader = styled.div`
       border-top-left-radius: 10px;
       border-bottom-left-radius: 10px;
       @media (min-width: 600px) {
-        height: 40px;
         font-size: 14px;
+        margin-top: 5px;
       }
       @media (min-width: 800px) {
+        height: 40px;
         width: 480px;
         position: absolute;
         top: 20px;
@@ -125,13 +126,14 @@ const DivHeader = styled.div`
     img {
       width: 120px;
       position: absolute;
-      top: 2;
+      top: 0;
       left: 5;
       @media (min-width: 600px) {
         width: 150px;
       }
       @media (min-width: 800px) {
         width: 180px;
+        top: 12px;
         left: 25;
       }
       @media (min-width: 1250px) {
@@ -152,10 +154,11 @@ const DivHeader = styled.div`
       border-top-right-radius: 10px;
       border-bottom-right-radius: 10px;
       @media (min-width: 600px) {
-        height: 40px;
+        margin-top: 5px;
       }
       @media (min-width: 800px) {
         position: absolute;
+        height: 40px;
         top: 20px;
         left: 730px;
       }

@@ -174,6 +174,7 @@ const DivHeader = styled.div`
         margin-top: 15px;
         @media (min-width: 800px) {
           margin-right: 0px;
+          margin-top: 0px;
         }
       }
     }
@@ -181,6 +182,7 @@ const DivHeader = styled.div`
       width: 180px;
       @media (min-width: 800px) {
         padding-top: 0;
+        margin-bottom: 10px;
       }
       @media (min-width: 1250px) {
         margin-left: 100px;
@@ -218,7 +220,7 @@ const DivHeader = styled.div`
     @media (min-width: 800px) {
       width: 480px;
       position: absolute;
-      top: 30px;
+      top: 20px;
       left: 230px;
     }
     @media (min-width: 1250px) {
@@ -246,7 +248,7 @@ const DivHeader = styled.div`
     @media (min-width: 800px) {
       margin-bottom: 20px;
       position: absolute;
-      top: 30px;
+      top: 20px;
       left: 710px;
     }
     @media (min-width: 1250px) {
