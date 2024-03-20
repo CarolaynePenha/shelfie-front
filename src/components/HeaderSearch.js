@@ -10,13 +10,11 @@ import SrcContext from "../context/SrcContext";
 import Logo from "./../assets/logo.png";
 import { logOut } from "../utils";
 import UserContext from "../context/UserContext";
-import { useState } from "react";
 
 export default function HeaderSearch({ srcBar, setSrcBar, setBooks }) {
   const { token, setToken } = useContext(TokenContext);
   const { srcInfosArr, setSrcInfosArr } = useContext(SrcContext);
   const { setUser } = useContext(UserContext);
-  const [index, setIndex] = useState(9);
   let srcArr = [];
   const navigate = useNavigate();
 
@@ -96,30 +94,73 @@ const DivHeader = styled.div`
   position: fixed;
   top: 0;
   z-index: 2;
+
   .src {
     width: 100%;
     display: flex;
     justify-content: center;
-    margin-top: 15px;
+    margin-top: 30px;
     .debounce-input {
       width: 60%;
       border: none;
       height: 35px;
       z-index: 3;
+      border-top-left-radius: 10px;
+      border-bottom-left-radius: 10px;
+      @media (min-width: 600px) {
+        height: 40px;
+        font-size: 14px;
+      }
+      @media (min-width: 800px) {
+        width: 480px;
+        position: absolute;
+        top: 20px;
+        left: 250px;
+      }
+      @media (min-width: 1250px) {
+        left: 380px;
+      }
     }
     img {
-      width: 40%;
+      width: 120px;
       position: absolute;
       top: 2;
-      left: 2;
+      left: 5;
+      @media (min-width: 600px) {
+        width: 150px;
+      }
+      @media (min-width: 800px) {
+        width: 180px;
+        left: 25;
+      }
+      @media (min-width: 1250px) {
+        left: 100px;
+      }
+      @media (min-width: 1400px) {
+        left: 150px;
+      }
     }
+
     .icon-src {
       display: flex;
       align-items: center;
       justify-content: center;
-      width: 10%;
+      width: 40px;
       height: 35px;
       background-color: #ffffff;
+      border-top-right-radius: 10px;
+      border-bottom-right-radius: 10px;
+      @media (min-width: 600px) {
+        height: 40px;
+      }
+      @media (min-width: 800px) {
+        position: absolute;
+        top: 20px;
+        left: 730px;
+      }
+      @media (min-width: 1250px) {
+        left: 860px;
+      }
     }
   }
 `;

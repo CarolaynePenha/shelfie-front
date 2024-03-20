@@ -27,7 +27,7 @@ export default function CalendarToYear({ setFilter, setSrcBar, search }) {
         <button className="confirm" onClick={search}>
           ok
         </button>
-        <button className="confirm" onClick={() => setFilter("filtrar por:")}>
+        <button className="confirm" onClick={() => setFilter("Filtrar por:")}>
           cancelar
         </button>
       </div>

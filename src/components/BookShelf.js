@@ -19,4 +19,7 @@ const DivShelfBook = styled.div`
   img {
     height: 98%;
   }
+  @media (min-width: 600px) {
+    height: 22vh;
+  }
 `;

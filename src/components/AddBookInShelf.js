@@ -296,7 +296,12 @@ export default function AddBookInShelf() {
     <>
       <Container>
         <div className="header">
-          <Undo2 onClick={() => navigate(-1)} color="#574145" size={25} />
+          <Undo2
+            className="undo2-icon"
+            onClick={() => navigate(-1)}
+            color="#574145"
+            size={25}
+          />
           {favorite && infosPost.status === "Lido" && (
             <Heart
               className="heart-icon"
@@ -333,39 +338,56 @@ export default function AddBookInShelf() {
           )}
         </div>
         <img src={book?.bookImage} alt="Capa do livro" />
-        {book && existInShelfParams === "newBook" && (
-          <form onSubmit={post}>
-            <div className="have">
-              <input
-                required
-                onClick={() => setInfosPost({ ...infosPost, iHave: true })}
-                type="radio"
-                name="Ihave"
-                value="Tenho"
-                defaultChecked={infosPost.iHave === true}
-              />
-              <label>Tenho</label>
-            </div>
-            <div className="have">
-              <input
-                required
-                onClick={() => setInfosPost({ ...infosPost, iHave: false })}
-                type="radio"
-                name="Ihave"
-                value="Não tenho"
-                defaultChecked={infosPost.iHave === false}
-              />
-              <label>Não tenho</label>
-            </div>
-            {iHave && (
+        <div className="content">
+          {book && existInShelfParams === "newBook" && (
+            <form onSubmit={post}>
+              <div className="have">
+                <input
+                  required
+                  onClick={() => setInfosPost({ ...infosPost, iHave: true })}
+                  type="radio"
+                  name="Ihave"
+                  value="Tenho"
+                  defaultChecked={infosPost.iHave === true}
+                />
+                <label>Tenho</label>
+              </div>
+              <div className="have">
+                <input
+                  required
+                  onClick={() => setInfosPost({ ...infosPost, iHave: false })}
+                  type="radio"
+                  name="Ihave"
+                  value="Não tenho"
+                  defaultChecked={infosPost.iHave === false}
+                />
+                <label>Não tenho</label>
+              </div>
+              {iHave && (
+                <select
+                  required
+                  value={type}
+                  onChange={(e) => {
+                    setInfosPost({ ...infosPost, type: e.target.value });
+                  }}
+                >
+                  {bookTypeArr.map((value, index) => {
+                    return (
+                      <option key={index} value={value}>
+                        {value}
+                      </option>
+                    );
+                  })}
+                </select>
+              )}
               <select
                 required
-                value={type}
+                value={status}
                 onChange={(e) => {
-                  setInfosPost({ ...infosPost, type: e.target.value });
+                  setInfosPost({ ...infosPost, status: e.target.value });
                 }}
               >
-                {bookTypeArr.map((value, index) => {
+                {bookStatusArr.map((value, index) => {
                   return (
                     <option key={index} value={value}>
                       {value}
@@ -373,138 +395,145 @@ export default function AddBookInShelf() {
                   );
                 })}
               </select>
-            )}
-            <select
-              required
-              value={status}
-              onChange={(e) => {
-                setInfosPost({ ...infosPost, status: e.target.value });
-              }}
-            >
-              {bookStatusArr.map((value, index) => {
-                return (
-                  <option key={index} value={value}>
-                    {value}
-                  </option>
-                );
-              })}
-            </select>
-            {infosPost.status === "Lido" ? (
-              <>
-                <div className="rating">
-                  <p>Quantas estrelas?</p>
-                  <Rating
-                    onClick={handleRating}
-                    fillColor="#574145"
-                    allowFraction={true}
-                    transition={true}
-                    size={50}
-                    tooltipDefaultText={"Avalie"}
-                    showTooltip={true}
-                    initialValue={rating}
-                    tooltipArray={[
-                      "Muito ruim:  0.5",
-                      "Ruim:  1.0",
-                      "Ruim:  1.5",
-                      "Razoável:  2.0",
-                      "Razoável:  2.5",
-                      "Bom:  3.0",
-                      "Bom:  3.5",
-                      "Muito Bom:  4.0",
-                      "Quase Perfeito:  4.5 ",
-                      "Perfeito:  5.0",
-                    ]}
-                  />
-                </div>
-                <div className="date">
-                  <label>Data de início da Leitura</label>
-                  <div className="date-input">
-                    <input
-                      required
-                      value={dateConverterToString(ratingInfos.startDate)}
-                      onClick={() => setShowCalendar("startDate")}
+              {infosPost.status === "Lido" ? (
+                <>
+                  <div className="rating">
+                    <p>Quantas estrelas?</p>
+                    <Rating
+                      onClick={handleRating}
+                      fillColor="#574145"
+                      allowFraction={true}
+                      transition={true}
+                      size={50}
+                      tooltipDefaultText={"Avalie"}
+                      showTooltip={true}
+                      initialValue={rating}
+                      tooltipArray={[
+                        "Muito ruim:  0.5",
+                        "Ruim:  1.0",
+                        "Ruim:  1.5",
+                        "Razoável:  2.0",
+                        "Razoável:  2.5",
+                        "Bom:  3.0",
+                        "Bom:  3.5",
+                        "Muito Bom:  4.0",
+                        "Quase Perfeito:  4.5 ",
+                        "Perfeito:  5.0",
+                      ]}
                     />
-                    <CalendarDays size={20} />
                   </div>
-                  <label>Data de fim da Leitura</label>
-                  <div className="date-input">
-                    <input
-                      required
-                      value={dateConverterToString(ratingInfos.endDate)}
-                      onClick={() => setShowCalendar("endDate")}
-                    />
-                    <CalendarDays size={20} />
-                  </div>
+                  <div className="date">
+                    <label>Data de início da Leitura</label>
+                    <div className="date-input">
+                      <input
+                        required
+                        value={dateConverterToString(ratingInfos.startDate)}
+                        onClick={() => setShowCalendar("startDate")}
+                      />
+                      <CalendarDays size={20} />
+                    </div>
+                    <label>Data de fim da Leitura</label>
+                    <div className="date-input">
+                      <input
+                        required
+                        value={dateConverterToString(ratingInfos.endDate)}
+                        onClick={() => setShowCalendar("endDate")}
+                      />
+                      <CalendarDays size={20} />
+                    </div>
 
-                  {showCalendar === "startDate" ||
-                  showCalendar === "endDate" ? (
-                    <Calendar
-                      setRatingInfos={setRatingInfos}
-                      ratingInfos={ratingInfos}
-                      startOrEndDate={showCalendar}
-                      setShowCalendar={setShowCalendar}
-                      existInShelfParams={existInShelfParams}
-                      handleSubmitRating={handleSubmitRating}
-                    />
-                  ) : (
-                    ""
-                  )}
-                </div>
-              </>
-            ) : (
-              ""
-            )}
-            <button type="submit"> Salvar</button>
-          </form>
-        )}
-        {book && existInShelfParams === "existingBook" && (
-          <section>
-            <div className="have">
-              <input
-                disabled={!editable}
-                required
-                onClick={() => {
-                  setInfosPost({ ...infosPost, iHave: true });
-                  updateShelfInfos({ bookStatus, bookType, iHaveBook: "true" });
-                }}
-                type="radio"
-                name="Ihave"
-                value="Tenho"
-                defaultChecked={infosPost.iHave === true}
-              />
-              <label>Tenho</label>
-            </div>
-            <div className="have">
-              <input
-                disabled={!editable}
-                required
-                onClick={() => {
-                  setInfosPost({ ...infosPost, iHave: false });
-                  updateShelfInfos({
-                    bookStatus,
-                    bookType,
-                    iHaveBook: "false",
-                  });
-                }}
-                type="radio"
-                name="Ihave"
-                value="Não tenho"
-                defaultChecked={infosPost.iHave === false}
-              />
-              <label>Não tenho</label>
-            </div>
-            {iHave && (
+                    {showCalendar === "startDate" ||
+                    showCalendar === "endDate" ? (
+                      <Calendar
+                        setRatingInfos={setRatingInfos}
+                        ratingInfos={ratingInfos}
+                        startOrEndDate={showCalendar}
+                        setShowCalendar={setShowCalendar}
+                        existInShelfParams={existInShelfParams}
+                        handleSubmitRating={handleSubmitRating}
+                      />
+                    ) : (
+                      ""
+                    )}
+                  </div>
+                </>
+              ) : (
+                ""
+              )}
+              <button type="submit"> Salvar</button>
+            </form>
+          )}
+          {book && existInShelfParams === "existingBook" && (
+            <section>
+              <div className="have">
+                <input
+                  disabled={!editable}
+                  required
+                  onClick={() => {
+                    setInfosPost({ ...infosPost, iHave: true });
+                    updateShelfInfos({
+                      bookStatus,
+                      bookType,
+                      iHaveBook: "true",
+                    });
+                  }}
+                  type="radio"
+                  name="Ihave"
+                  value="Tenho"
+                  defaultChecked={infosPost.iHave === true}
+                />
+                <label>Tenho</label>
+              </div>
+              <div className="have">
+                <input
+                  disabled={!editable}
+                  required
+                  onClick={() => {
+                    setInfosPost({ ...infosPost, iHave: false });
+                    updateShelfInfos({
+                      bookStatus,
+                      bookType,
+                      iHaveBook: "false",
+                    });
+                  }}
+                  type="radio"
+                  name="Ihave"
+                  value="Não tenho"
+                  defaultChecked={infosPost.iHave === false}
+                />
+                <label>Não tenho</label>
+              </div>
+              {iHave && (
+                <select
+                  disabled={!editable}
+                  required
+                  value={type}
+                  onChange={(e) => {
+                    setInfosPost({ ...infosPost, type: e.target.value });
+                    bookType = e.target.value;
+                    updateShelfInfos({ bookStatus, bookType });
+                  }}
+                >
+                  {bookTypeArr.map((value, index) => {
+                    return (
+                      <option key={index} value={value}>
+                        {value}
+                      </option>
+                    );
+                  })}
+                </select>
+              )}
               <select
-                disabled={!editable}
                 required
-                value={type}
+                disabled={!editable}
+                value={status}
                 onChange={(e) => {
-                  setInfosPost({ ...infosPost, type: e.target.value });
-                  bookType = e.target.value;
+                  setInfosPost({ ...infosPost, status: e.target.value });
+                  bookStatus = e.target.value;
                   updateShelfInfos({ bookStatus, bookType });
                 }}
               >
-                {bookTypeArr.map((value, index) => {
+                {bookStatusArr.map((value, index) => {
                   return (
                     <option key={index} value={value}>
                       {value}
@@ -512,128 +541,109 @@ export default function AddBookInShelf() {
                   );
                 })}
               </select>
-            )}
-            <select
-              required
-              disabled={!editable}
-              value={status}
-              onChange={(e) => {
-                setInfosPost({ ...infosPost, status: e.target.value });
-                bookStatus = e.target.value;
-                updateShelfInfos({ bookStatus, bookType });
-              }}
-            >
-              {bookStatusArr.map((value, index) => {
-                return (
-                  <option key={index} value={value}>
-                    {value}
-                  </option>
-                );
-              })}
-            </select>
-            {infosPost.status === "Lido" ? (
-              <>
-                <div className="rating">
-                  <p>Quantas estrelas?</p>
-                  <Rating
-                    onClick={handleRating}
-                    fillColor="#574145"
-                    allowFraction={true}
-                    transition={true}
-                    readonly={!editable}
-                    size={40}
-                    tooltipDefaultText={"Avalie"}
-                    showTooltip={true}
-                    initialValue={rating}
-                    tooltipArray={[
-                      "Muito ruim:  0.5",
-                      "Ruim:  1.0",
-                      "Ruim:  1.5",
-                      "Razoável:  2.0",
-                      "Razoável:  2.5",
-                      "Bom:  3.0",
-                      "Bom:  3.5",
-                      "Muito Bom:  4.0",
-                      "Quase Perfeito:  4.5 ",
-                      "Perfeito:  5.0",
-                    ]}
-                  />
-                </div>
-                <div className="date">
-                  <label>Data de início da Leitura</label>
-                  <div className="date-input">
-                    <input
-                      disabled={!editable}
-                      required
-                      value={dateConverterToString(ratingInfos.startDate)}
-                      onClick={() => {
-                        setShowCalendar("startDate");
-                      }}
+              {infosPost.status === "Lido" ? (
+                <>
+                  <div className="rating">
+                    <p>Quantas estrelas?</p>
+                    <Rating
+                      onClick={handleRating}
+                      fillColor="#574145"
+                      allowFraction={true}
+                      transition={true}
+                      readonly={!editable}
+                      size={40}
+                      tooltipDefaultText={"Avalie"}
+                      showTooltip={true}
+                      initialValue={rating}
+                      tooltipArray={[
+                        "Muito ruim:  0.5",
+                        "Ruim:  1.0",
+                        "Ruim:  1.5",
+                        "Razoável:  2.0",
+                        "Razoável:  2.5",
+                        "Bom:  3.0",
+                        "Bom:  3.5",
+                        "Muito Bom:  4.0",
+                        "Quase Perfeito:  4.5 ",
+                        "Perfeito:  5.0",
+                      ]}
                     />
-                    <CalendarDays size={20} />
                   </div>
-                  <label>Data de fim da Leitura</label>
-                  <div className="date-input">
-                    <input
-                      disabled={!editable}
-                      required
-                      value={dateConverterToString(ratingInfos.endDate)}
-                      onClick={() => {
-                        setShowCalendar("endDate");
-                      }}
-                    />
-                    <CalendarDays size={20} />
-                  </div>
+                  <div className="date">
+                    <label>Data de início da Leitura</label>
+                    <div className="date-input">
+                      <input
+                        disabled={!editable}
+                        required
+                        value={dateConverterToString(ratingInfos.startDate)}
+                        onClick={() => {
+                          setShowCalendar("startDate");
+                        }}
+                      />
+                      <CalendarDays size={20} />
+                    </div>
+                    <label>Data de fim da Leitura</label>
+                    <div className="date-input">
+                      <input
+                        disabled={!editable}
+                        required
+                        value={dateConverterToString(ratingInfos.endDate)}
+                        onClick={() => {
+                          setShowCalendar("endDate");
+                        }}
+                      />
+                      <CalendarDays size={20} />
+                    </div>
 
-                  {showCalendar === "startDate" ||
-                  showCalendar === "endDate" ? (
-                    <Calendar
-                      setRatingInfos={setRatingInfos}
-                      ratingInfos={ratingInfos}
-                      startOrEndDate={showCalendar}
-                      setShowCalendar={setShowCalendar}
-                      existInShelfParams={existInShelfParams}
-                      handleSubmitRating={handleSubmitRating}
-                    />
-                  ) : (
-                    ""
-                  )}
-                </div>
-              </>
-            ) : (
-              ""
-            )}
-            {!editable && (
-              <>
-                {" "}
+                    {showCalendar === "startDate" ||
+                    showCalendar === "endDate" ? (
+                      <Calendar
+                        setRatingInfos={setRatingInfos}
+                        ratingInfos={ratingInfos}
+                        startOrEndDate={showCalendar}
+                        setShowCalendar={setShowCalendar}
+                        existInShelfParams={existInShelfParams}
+                        handleSubmitRating={handleSubmitRating}
+                      />
+                    ) : (
+                      ""
+                    )}
+                  </div>
+                </>
+              ) : (
+                ""
+              )}
+              {!editable && (
+                <>
+                  <button
+                    onClick={() => {
+                      setEditable(true);
+                    }}
+                  >
+                    Editar
+                  </button>
+                  <button
+                    className="delete"
+                    onClick={() => {
+                      deleteBooksInShelf();
+                    }}
+                  >
+                    Excluir
+                  </button>
+                </>
+              )}
+              {editable && (
                 <button
                   onClick={() => {
-                    setEditable(true);
+                    setEditable(false);
                   }}
                 >
-                  Editar
+                  Parar de editar
                 </button>
-                <button
-                  className="delete"
-                  onClick={() => {
-                    deleteBooksInShelf();
-                  }}
-                >
-                  Excluir
-                </button>
-              </>
-            )}
-            {editable && (
-              <button
-                onClick={() => {
-                  setEditable(false);
-                }}
-              >
-                Parar de editar
-              </button>
-            )}
-          </section>
-        )}
+              )}
+            </section>
+          )}
+        </div>
       </Container>
     </>
   );
@@ -647,7 +657,24 @@ const Container = styled.section`
   flex-direction: column;
   align-items: center;
   position: relative;
-
+  .content {
+    width: 100%;
+    @media (min-width: 800px) {
+      width: calc(100vw - 250px);
+      position: fixed;
+      left: 140px;
+      top: 20%;
+    }
+    @media (min-width: 1250px) {
+      width: calc(100vw - 460px);
+      position: fixed;
+      left: 240px;
+    }
+    @media (min-width: 1400px) {
+      left: 400px;
+      width: calc(100vw - 800px);
+    }
+  }
   .header {
     height: 15vh;
     width: 100%;
@@ -659,6 +686,21 @@ const Container = styled.section`
     .heart-icon {
       margin-top: 20px;
       margin-right: 20px;
+      @media (min-width: 800px) {
+        position: absolute;
+        right: 80px;
+      }
+      @media (min-width: 1250px) {
+        left: calc(230px + (100vw - 480px));
+      }
+      @media (min-width: 1400px) {
+        left: calc(230px + (100vw - 660px));
+      }
+    }
+    .undo2-icon {
+      @media (min-width: 800px) {
+        display: none;
+      }
     }
   }
   img {
@@ -682,7 +724,7 @@ const Container = styled.section`
     flex-direction: column;
   }
   button {
-    width: 50%;
+    width: 250px;
     height: 40px;
     border-radius: 5px;
     margin: 10px auto;
@@ -717,6 +759,9 @@ const Container = styled.section`
     &:focus {
       border: solid 2px #574145;
       outline: none;
+    }
+    @media (min-width: 600px) {
+      height: 40px;
     }
   }
 

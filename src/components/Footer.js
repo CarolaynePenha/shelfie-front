@@ -14,6 +14,7 @@ export default function Footer() {
   return (
     <DivFooter>
       <Home
+        className="icon-footer"
         onClick={() => {
           navigate(`/${menu.shelf}`);
         }}
@@ -23,6 +24,7 @@ export default function Footer() {
         size={25}
       />
       <Rocket
+        className="icon-footer"
         onClick={() => {
           navigate(`/${menu.release}`);
         }}
@@ -32,6 +34,7 @@ export default function Footer() {
         size={25}
       />
       <Search
+        className="icon-footer"
         onClick={() => {
           navigate(`/${menu.search}`);
         }}
@@ -41,6 +44,7 @@ export default function Footer() {
         size={25}
       />
       <Trophy
+        className="icon-footer"
         onClick={() => {
           navigate(`/${menu.ranking}`);
         }}
@@ -50,6 +54,7 @@ export default function Footer() {
         size={25}
       />
       <BookUser
+        className="icon-footer"
         onClick={() => {
           navigate(`/${menu.profile}`);
         }}
@@ -74,4 +79,22 @@ const DivFooter = styled.div`
   position: fixed;
   bottom: 0;
   z-index: 2;
+  @media (min-width: 800px) {
+    flex-direction: column;
+    width: 100px;
+    height: 40vh;
+    top: 30vh;
+    left: 20px;
+
+    .icon-footer {
+      width: 32px;
+      height: 32px;
+    }
+  }
+  @media (min-width: 1250px) {
+    margin-left: 100px;
+  }
+  @media (min-width: 1400px) {
+    margin-left: 150px;
+  }
 `;

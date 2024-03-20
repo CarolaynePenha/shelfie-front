@@ -117,6 +117,9 @@ const DivBook = styled.div`
   img {
     height: 14vh;
     margin-right: 10px;
+    @media (min-width: 800px) {
+      height: 20vh;
+    }
   }
   .infos {
     display: flex;
@@ -127,6 +130,7 @@ const DivBook = styled.div`
     font-weight: 600;
     padding: 5px;
     font-size: 16px;
+    line-height: 130%;
   }
   p {
     padding: 5px;

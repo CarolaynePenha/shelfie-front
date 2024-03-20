@@ -60,147 +60,155 @@ export default function BookInfos() {
     <>
       <Container>
         <div className="header">
-          <Undo2 onClick={() => navigate(-1)} color="#574145" size={25} />
-        </div>
-        <div className="div-img">
-          <img src={book.bookImage} alt="capa do livro" />
-        </div>
-        {book.status === "done" ? (
-          <>
-            <Tooltip id="done-books" />
-            <BookOpenCheck
-              data-tooltip-id="done-books"
-              data-tooltip-content="Lido"
-              className="icon-status"
-              onClick={() => navigate(`/addBook/${book.id}/${existingBook}`)}
-              color="#00693e"
-              fill="#00693e"
-              fillOpacity={0.5}
-              size={sizeIcon}
-            />
-          </>
-        ) : book.status === "reading" ? (
-          <>
-            <Tooltip id="reading-books" />
-            <BookOpen
-              data-tooltip-id="reading-books"
-              data-tooltip-content="Lendo"
-              className="icon-status"
-              onClick={() => navigate(`/addBook/${book.id}/${existingBook}`)}
-              color="#f3b93f"
-              fill="#f3b93f"
-              fillOpacity={0.5}
-              size={sizeIcon}
-            />
-          </>
-        ) : book.status === "wish" ? (
-          <>
-            <Tooltip id="wish-books" />
-            <BookDashed
-              data-tooltip-id="wish-books"
-              data-tooltip-content="Quero ler"
-              className="icon-status"
-              onClick={() => navigate(`/addBook/${book.id}/${existingBook}`)}
-              color="#175676"
-              size={sizeIcon}
-            />
-          </>
-        ) : book.status === "abandoned" ? (
-          <>
-            <Tooltip id="abandoned-books" />
-            <BookDown
-              data-tooltip-id="abandoned-books"
-              data-tooltip-content="Abandonado"
-              className="icon-status"
-              onClick={() => navigate(`/addBook/${book.id}/${existingBook}`)}
-              color="#000000"
-              fill="#000000"
-              fillOpacity={0.5}
-              size={sizeIcon}
-            />
-          </>
-        ) : book.status === "rereading" ? (
-          <>
-            <Tooltip id="rereading-books" />
-            <BookOpen
-              data-tooltip-id="rereading-books"
-              data-tooltip-content="Relendo"
-              className="icon-status"
-              onClick={() => navigate(`/addBook/${book.id}/${existingBook}`)}
-              color="#df6d2f"
-              fill="#df6d2f"
-              fillOpacity={0.5}
-              size={25}
-            />
-          </>
-        ) : (
-          <>
-            <Tooltip id="add-books" />
-            <Plus
-              data-tooltip-id="add-books"
-              data-tooltip-content="Adicionar"
-              className="icon-status"
-              onClick={() => navigate(`/addBook/${book.id}/${newBook}`)}
-              color="#574145"
-              size={sizeIcon}
-            />
-          </>
-        )}
-        <div className="book-infos">
-          <strong>{book.title}</strong>
-          <p>{book?.name}</p>
-          <small> {book.metricDone} Avaliações </small>
-        </div>
-        <div className="reading-data">
-          {book.metricDone >= 2 ? (
-            <p>
-              <strong>{book.metricDone}</strong> Leram{" "}
-            </p>
-          ) : (
-            <p>
-              <strong>{book.metricDone}</strong> Leu{" "}
-            </p>
-          )}
-          {book.metricWish >= 2 ? (
-            <p>
-              <strong>{book.metricWish}</strong> Querem ler
-            </p>
-          ) : (
-            <p>
-              <strong>{book.metricWish}</strong> Quer ler
-            </p>
-          )}
-          {book.metricReading >= 2 ? (
-            <p>
-              <strong>{book.metricReading}</strong> Lendo
-            </p>
-          ) : (
-            <p>
-              <strong>{book.metricReading}</strong> Lendo
-            </p>
-          )}
+          <Undo2
+            className="undo2-icon"
+            onClick={() => navigate(-1)}
+            color="#574145"
+            size={25}
+          />
         </div>
 
-        <section className="rating">
-          <p>Avaliações</p>
-          {book.totalstars && (
-            <div className="stars">
-              <strong> {book.totalstars}</strong>
-              <Rating
-                fillColor="#574145"
-                allowFraction={true}
-                size={40}
-                readonly={true}
-                initialValue={book.totalstars}
+        <div className="content">
+          <div className="div-img">
+            <img src={book.bookImage} alt="capa do livro" />
+          </div>
+          {book.status === "done" ? (
+            <>
+              <Tooltip id="done-books" />
+              <BookOpenCheck
+                data-tooltip-id="done-books"
+                data-tooltip-content="Lido"
+                className="icon-status"
+                onClick={() => navigate(`/addBook/${book.id}/${existingBook}`)}
+                color="#00693e"
+                fill="#00693e"
+                fillOpacity={0.5}
+                size={sizeIcon}
               />
-            </div>
+            </>
+          ) : book.status === "reading" ? (
+            <>
+              <Tooltip id="reading-books" />
+              <BookOpen
+                data-tooltip-id="reading-books"
+                data-tooltip-content="Lendo"
+                className="icon-status"
+                onClick={() => navigate(`/addBook/${book.id}/${existingBook}`)}
+                color="#f3b93f"
+                fill="#f3b93f"
+                fillOpacity={0.5}
+                size={sizeIcon}
+              />
+            </>
+          ) : book.status === "wish" ? (
+            <>
+              <Tooltip id="wish-books" />
+              <BookDashed
+                data-tooltip-id="wish-books"
+                data-tooltip-content="Quero ler"
+                className="icon-status"
+                onClick={() => navigate(`/addBook/${book.id}/${existingBook}`)}
+                color="#175676"
+                size={sizeIcon}
+              />
+            </>
+          ) : book.status === "abandoned" ? (
+            <>
+              <Tooltip id="abandoned-books" />
+              <BookDown
+                data-tooltip-id="abandoned-books"
+                data-tooltip-content="Abandonado"
+                className="icon-status"
+                onClick={() => navigate(`/addBook/${book.id}/${existingBook}`)}
+                color="#000000"
+                fill="#000000"
+                fillOpacity={0.5}
+                size={sizeIcon}
+              />
+            </>
+          ) : book.status === "rereading" ? (
+            <>
+              <Tooltip id="rereading-books" />
+              <BookOpen
+                data-tooltip-id="rereading-books"
+                data-tooltip-content="Relendo"
+                className="icon-status"
+                onClick={() => navigate(`/addBook/${book.id}/${existingBook}`)}
+                color="#df6d2f"
+                fill="#df6d2f"
+                fillOpacity={0.5}
+                size={25}
+              />
+            </>
+          ) : (
+            <>
+              <Tooltip id="add-books" />
+              <Plus
+                data-tooltip-id="add-books"
+                data-tooltip-content="Adicionar"
+                className="icon-status"
+                onClick={() => navigate(`/addBook/${book.id}/${newBook}`)}
+                color="#574145"
+                size={sizeIcon}
+              />
+            </>
           )}
-          {!book.totalstars && (
-            <div className="stars">
-              <p> Livro sem avaliações. </p>
-            </div>
-          )}
-        </section>
+          <div className="book-infos">
+            <strong>{book.title}</strong>
+            <p>{book?.name}</p>
+            <small> {book.metricDone} Avaliações </small>
+          </div>
+          <div className="reading-data">
+            {book.metricDone >= 2 ? (
+              <p>
+                <strong>{book.metricDone}</strong> Leram{" "}
+              </p>
+            ) : (
+              <p>
+                <strong>{book.metricDone}</strong> Leu{" "}
+              </p>
+            )}
+            {book.metricWish >= 2 ? (
+              <p>
+                <strong>{book.metricWish}</strong> Querem ler
+              </p>
+            ) : (
+              <p>
+                <strong>{book.metricWish}</strong> Quer ler
+              </p>
+            )}
+            {book.metricReading >= 2 ? (
+              <p>
+                <strong>{book.metricReading}</strong> Lendo
+              </p>
+            ) : (
+              <p>
+                <strong>{book.metricReading}</strong> Lendo
+              </p>
+            )}
+          </div>
+
+          <section className="rating">
+            <p>Avaliações</p>
+            {book.totalstars && (
+              <div className="stars">
+                <strong> {book.totalstars}</strong>
+                <Rating
+                  fillColor="#574145"
+                  allowFraction={true}
+                  size={40}
+                  readonly={true}
+                  initialValue={book.totalstars}
+                />
+              </div>
+            )}
+            {!book.totalstars && (
+              <div className="stars">
+                <p> Livro sem avaliações. </p>
+              </div>
+            )}
+          </section>
+        </div>
       </Container>
       <Footer />
     </>
@@ -223,6 +231,23 @@ const Container = styled.section`
     padding: 10px;
     border-bottom: 1px solid #5741457a;
   }
+  .content {
+    @media (min-width: 800px) {
+      width: calc(100vw - 250px);
+      position: fixed;
+      left: 140px;
+      top: 150px;
+    }
+    @media (min-width: 1250px) {
+      width: calc(100vw - 460px);
+      position: fixed;
+      left: 240px;
+    }
+    @media (min-width: 1400px) {
+      left: 290px;
+      width: calc(100vw - 510px);
+    }
+  }
   section {
     height: 35vh;
     width: 100%;
@@ -235,8 +260,19 @@ const Container = styled.section`
     position: fixed;
     top: 22vh;
     right: 20vw;
+    @media (max-width: 400px) {
+      right: 10vw;
+    }
+    @media (min-width: 800px) {
+      width: 35px;
+      height: 35px;
+    }
   }
-
+  .undo2-icon {
+    @media (min-width: 800px) {
+      display: none;
+    }
+  }
   .book-infos {
     height: fit-content;
     width: 100%;
@@ -263,20 +299,30 @@ const Container = styled.section`
     display: flex;
     justify-content: space-evenly;
     align-items: center;
-    border: 1px solid #5741457a;
+    filter: drop-shadow(1px 2px 3px #000000);
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
     background-color: #ffffff;
     strong {
       font-weight: 600;
     }
   }
   img {
-    height: 25vh;
+    height: 20vh;
     position: fixed;
-    top: 10vh;
-    right: 38vw;
+    top: 5vh;
+    @media (max-width: 400px) {
+      top: 20px;
+    }
+    @media (min-width: 1250px) {
+      height: 25vh;
+    }
   }
   .div-img {
-    padding-top: 35%;
+    padding-top: 15%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
   }
   .rating {
     height: 15vh;
@@ -285,12 +331,13 @@ const Container = styled.section`
     filter: drop-shadow(1px 2px 2px #000000);
     display: flex;
     align-items: flex-start;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
     p {
       margin-left: 20px;
       font-size: 20px;
       font-weight: 600;
     }
-
     .stars {
       display: flex;
       align-items: center;

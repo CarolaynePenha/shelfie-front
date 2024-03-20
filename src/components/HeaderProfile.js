@@ -14,6 +14,7 @@ export default function HeaderProfile() {
   const { setToken } = useContext(TokenContext);
   return (
     <DivHeader>
+      <img className="logo" src={Logo} />
       <LogOut
         onClick={() => logOut(setToken, setUser, navigate)}
         className="icon-logout"
@@ -22,11 +23,7 @@ export default function HeaderProfile() {
         fillOpacity={0.5}
         size={25}
       />
-      <img className="logo" src={Logo} />
-      <div className="user">
-        <img className="img" src={user.image} />
-        <p>{user.name}</p>
-      </div>
+      <img className="img" src={user.image} />
     </DivHeader>
   );
 }
@@ -34,46 +31,59 @@ export default function HeaderProfile() {
 // ----------------------css
 const DivHeader = styled.div`
   width: 100%;
-  height: 16vh;
+  height: 10vh;
   background-color: #fde8e9;
   display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  align-items: flex-end;
+  justify-content: space-evenly;
+  align-items: center;
   position: fixed;
   top: 0;
   z-index: 2;
-  filter: drop-shadow(1px 2px 2px #000000);
+  border-bottom: 1px solid #5741457a;
   .logo {
-    width: 40%;
+    width: 120px;
     position: absolute;
-    top: 2;
-    left: 2;
+    top: 10px;
+    left: 20px;
+    @media (min-width: 600px) {
+      width: 150px;
+    }
+    @media (min-width: 800px) {
+      width: 180px;
+      left: 25;
+    }
+    @media (min-width: 1250px) {
+      left: 100px;
+    }
+    @media (min-width: 1400px) {
+      left: 150px;
+    }
   }
   .img {
     width: 40px;
     height: 50px;
     border-radius: 15px;
-    margin-bottom: 10px;
+    position: absolute;
+    top: 10px;
+    right: 18%;
+    @media (min-width: 800px) {
+      position: absolute;
+      right: 80px;
+    }
+    @media (min-width: 1250px) {
+      left: calc(230px + (100vw - 570px));
+    }
   }
   .icon-logout {
     position: absolute;
-    top: 12;
-    right: 20;
-  }
-  .user {
-    display: flex;
-    width: 100%;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: flex-start;
-    padding-left: 15px;
-    p {
-      font-weight: 600;
-      font-style: italic;
-      font-size: 18px;
-      padding-left: 6px;
-      margin-bottom: 10px;
+    top: 10px;
+    right: 20px;
+    @media (min-width: 800px) {
+      width: 30px;
+      height: 30px;
+    }
+    @media (min-width: 1250px) {
+      left: calc(230px + (100vw - 500px));
     }
   }
 `;

@@ -28,7 +28,7 @@ export default function Category({ search, setFilter, setSrcBar }) {
         })}
         <div className="button">
           <button type="submit">ok</button>
-          <button onClick={() => setFilter("filtrar por:")}>cancelar</button>
+          <button onClick={() => setFilter("Filtrar por:")}>cancelar</button>
         </div>
       </form>
     </DivCategory>

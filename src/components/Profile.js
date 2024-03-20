@@ -128,6 +128,20 @@ const Container = styled.section`
   flex-direction: column;
   align-items: flex-start;
   position: relative;
+  @media (min-width: 800px) {
+    width: calc(100vw - 250px);
+    position: fixed;
+    left: 140px;
+  }
+  @media (min-width: 1250px) {
+    width: calc(100vw - 460px);
+    position: fixed;
+    left: 230px;
+  }
+  @media (min-width: 1400px) {
+    left: 280px;
+    width: calc(100vw - 510px);
+  }
 
   .metrics {
     width: 100%;

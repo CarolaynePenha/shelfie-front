@@ -61,7 +61,7 @@ export default function Shelf() {
         process.env.REACT_APP_API_URL + `/shelf?src=${srcBar}&filter=${filter}`;
     }
 
-    setFilter("filtrar por:");
+    setFilter("Filtrar por:");
     setSrcBar("");
     const config = {
       headers: {
@@ -77,9 +77,9 @@ export default function Shelf() {
     }
   }
 
-  const filterArr = ["filtrar por:", "ano", "categoria"];
+  const filterArr = ["Filtrar por:", "ano", "categoria"];
   return (
-    <>
+    <Container>
       <Header
         search={search}
         setSrcBar={setSrcBar}
@@ -87,23 +87,26 @@ export default function Shelf() {
         setGetShelfBooks={setGetShelfBooks}
         getShelfBooks={getShelfBooks}
       />
-      <Container>
-        <select
-          required
-          value={filter}
-          onChange={(e) => {
-            setFilter(e.target.value);
-          }}
-          onClick={() => window.scrollTo(0, 500)}
-        >
-          {filterArr.map((value, index) => {
-            return (
-              <option key={index} value={value}>
-                {value}
-              </option>
-            );
-          })}
-        </select>
+      <div className="content">
+        <div className="shelf-top">
+          <select
+            required
+            value={filter}
+            onChange={(e) => {
+              setFilter(e.target.value);
+            }}
+            onClick={() => window.scrollTo(0, 500)}
+          >
+            {filterArr.map((value, index) => {
+              return (
+                <option key={index} value={value}>
+                  {value}
+                </option>
+              );
+            })}
+          </select>
+          <p>Minha Estante</p>
+        </div>
         {filter === "ano" && (
           <CalendarToYear
             setFilter={setFilter}
@@ -125,20 +128,27 @@ export default function Shelf() {
               return <Bookshelf key={index} shelfBook={shelfBook} />;
             })}
         </div>
-      </Container>
+      </div>
       <Footer />
-    </>
+    </Container>
   );
 }
 
 // ----------------------css
-const Container = styled.section`
+const Container = styled.div`
   width: 100%;
-  height: fit-content;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  position: relative;
+  .content {
+    width: 100%;
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    position: relative;
+  }
+  .shelf-top {
+    display: flex;
+    justify-content: center;
+  }
   .shelf {
     width: 100%;
     margin-top: 20px;
@@ -153,5 +163,36 @@ const Container = styled.section`
     margin-left: 20px;
     color: #574145;
     border: 1px solid #574145;
+    height: 30px;
+    border-radius: 10px;
+    font-weight: bold;
+    background-color: transparent;
+  }
+  @media (min-width: 600px) {
+    select {
+      font-size: 16px;
+      margin-top: 25vh;
+    }
+  }
+  @media (min-width: 800px) {
+    display: flex;
+    justify-content: space-evenly;
+    .content {
+      width: calc(100vw - 250px);
+    }
+  }
+  @media (min-width: 1250px) {
+    .content {
+      width: calc(100vw - 460px);
+      position: fixed;
+      left: 230px;
+      align-items: center;
+    }
+    @media (min-width: 1400px) {
+      .content {
+        width: calc(100vw - 510px);
+        left: 280px;
+      }
+    }
   }
 `;

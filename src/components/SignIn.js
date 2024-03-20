@@ -155,14 +155,21 @@ export const Container = styled.div`
     justify-content: center;
     section {
       width: 50%;
+      justify-content: flex-start;
+      img {
+        width: 300px;
+        margin-top: 15vh;
+        margin-bottom: 30px;
+      }
     }
+
     .books-img {
       display: flex;
       align-items: center;
       justify-content: center;
       width: 50%;
       img {
-        width: 90%;
+        width: 80%;
       }
     }
   }
