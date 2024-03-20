@@ -32,6 +32,7 @@ export default function Search() {
             <div className="src-top">
               <strong>Suas pesquisas recentes </strong>
               <Trash
+                className="trash-icon"
                 onClick={() => {
                   setSrcInfosArr([]);
                   localStorage.removeItem("srcInfosArr");
@@ -103,12 +104,18 @@ const Container = styled.section`
       align-items: center;
       margin-left: 20px;
     }
+    .src-and-icon:hover {
+      cursor: pointer;
+    }
     .src-top {
       display: flex;
       align-items: center;
       margin-left: 20px;
       justify-content: space-evenly;
       margin: 20px 0px;
+      .trash-icon:hover {
+        cursor: pointer;
+      }
     }
   }
 `;

@@ -168,6 +168,9 @@ const Container = styled.div`
     font-weight: bold;
     background-color: transparent;
   }
+  select:hover {
+    cursor: pointer;
+  }
   @media (min-width: 600px) {
     select {
       font-size: 16px;

@@ -33,6 +33,7 @@ export default function Book({ book }) {
               data-tooltip-id="done-books"
               data-tooltip-content="Lido"
               onClick={() => navigate(`/addBook/${book.id}/${existingBook}`)}
+              className="status-icon"
               color="#00693e"
               fill="#00693e"
               fillOpacity={0.5}
@@ -46,6 +47,7 @@ export default function Book({ book }) {
               data-tooltip-id="reading-books"
               data-tooltip-content="Lendo"
               onClick={() => navigate(`/addBook/${book.id}/${existingBook}`)}
+              className="status-icon"
               color="#f3b93f"
               fill="#f3b93f"
               fillOpacity={0.5}
@@ -59,6 +61,7 @@ export default function Book({ book }) {
               data-tooltip-id="wish-books"
               data-tooltip-content="Quero ler"
               onClick={() => navigate(`/addBook/${book.id}/${existingBook}`)}
+              className="status-icon"
               color="#175676"
               size={25}
             />
@@ -70,6 +73,7 @@ export default function Book({ book }) {
               data-tooltip-id="abandoned-books"
               data-tooltip-content="Abandonado"
               onClick={() => navigate(`/addBook/${book.id}/${existingBook}`)}
+              className="status-icon"
               color="#000000"
               fill="#000000"
               fillOpacity={0.5}
@@ -83,6 +87,7 @@ export default function Book({ book }) {
               data-tooltip-id="rereading-books"
               data-tooltip-content="Relendo"
               onClick={() => navigate(`/addBook/${book.id}/${existingBook}`)}
+              className="status-icon"
               color="#df6d2f"
               fill="#df6d2f"
               fillOpacity={0.5}
@@ -96,6 +101,7 @@ export default function Book({ book }) {
               data-tooltip-id="add-books"
               data-tooltip-content="Adicionar"
               onClick={() => navigate(`/addBook/${book.id}/${newBook}`)}
+              className="status-icon"
               color="#574145"
               size={25}
             />
@@ -121,6 +127,9 @@ const DivBook = styled.div`
       height: 20vh;
     }
   }
+  img:hover {
+    cursor: pointer;
+  }
   .infos {
     display: flex;
     flex-direction: column;
@@ -139,5 +148,8 @@ const DivBook = styled.div`
     display: flex;
     width: 80px;
     justify-content: center;
+    .status-icon:hover {
+      cursor: pointer;
+    }
   }
 `;

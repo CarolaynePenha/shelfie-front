@@ -79,6 +79,9 @@ const DivFooter = styled.div`
   position: fixed;
   bottom: 0;
   z-index: 2;
+  .icon-footer:hover {
+    cursor: pointer;
+  }
   @media (min-width: 800px) {
     flex-direction: column;
     width: 100px;

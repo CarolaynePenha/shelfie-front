@@ -9,6 +9,7 @@ import TokenContext from "../context/TokenContext";
 import { convertToISOString, dateConverterToString, logOut } from "../utils";
 import UserContext from "../context/UserContext";
 import Calendar from "./Calendar";
+import Logo from "./../assets/logo.png";
 
 export default function AddBookInShelf() {
   const { id, existInShelf } = useParams();
@@ -302,6 +303,7 @@ export default function AddBookInShelf() {
             color="#574145"
             size={25}
           />
+          <img className="logo" src={Logo} alt="Logo" />
           {favorite && infosPost.status === "Lido" && (
             <Heart
               className="heart-icon"
@@ -337,8 +339,10 @@ export default function AddBookInShelf() {
             />
           )}
         </div>
-        <img src={book?.bookImage} alt="Capa do livro" />
         <div className="content">
+          <div className="div-img">
+            <img src={book?.bookImage} alt="Capa do livro" />
+          </div>
           {book && existInShelfParams === "newBook" && (
             <form onSubmit={post}>
               <div className="have">
@@ -656,19 +660,15 @@ const Container = styled.section`
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   position: relative;
   .content {
     width: 100%;
     @media (min-width: 800px) {
-      width: calc(100vw - 250px);
-      position: fixed;
-      left: 140px;
-      top: 20%;
+      width: calc(100vw - 240px);
     }
     @media (min-width: 1250px) {
-      width: calc(100vw - 460px);
-      position: fixed;
-      left: 240px;
+      width: calc(100vw - 480px);
     }
     @media (min-width: 1400px) {
       left: 400px;
@@ -697,37 +697,59 @@ const Container = styled.section`
         left: calc(230px + (100vw - 660px));
       }
     }
+    .heart-icon:hover {
+      cursor: pointer;
+    }
     .undo2-icon {
+      margin-top: 10px;
       @media (min-width: 800px) {
         display: none;
       }
     }
-  }
-  img {
-    height: 20vh;
-    position: absolute;
-    top: 5vh;
+    .undo2-icon:hover {
+      cursor: pointer;
+    }
+    .logo {
+      position: absolute;
+      display: none;
+      @media (min-width: 600px) {
+        display: block;
+        top: 10px;
+        width: 150px;
+        left: 50px;
+      }
+      @media (min-width: 800px) {
+        width: 180px;
+        left: 120px;
+      }
+      @media (min-width: 1250px) {
+        left: 240px;
+      }
+      @media (min-width: 1400px) {
+        left: 400px;
+      }
+    }
   }
   section {
     width: 100%;
-    margin-top: 10vh;
     display: flex;
-    justify-content: space-evenly;
     flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
   }
   form {
     width: 100%;
-    margin-top: 10vh;
     display: flex;
-    justify-content: space-evenly;
-    border-bottom: 1px solid #5741457a;
     flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    border-bottom: 1px solid #5741457a;
   }
   button {
-    width: 250px;
+    width: 150px;
     height: 40px;
     border-radius: 5px;
-    margin: 10px auto;
+    margin-bottom: 15px;
     border: none;
     background-color: #965361;
     color: #ffffff;
@@ -736,6 +758,12 @@ const Container = styled.section`
     display: flex;
     justify-content: center;
     align-items: center;
+    @media (min-width: 600px) {
+      width: 200px;
+    }
+  }
+  button:hover {
+    cursor: pointer;
   }
   .delete {
     background-color: transparent;
@@ -743,15 +771,20 @@ const Container = styled.section`
     color: #790a1e;
   }
   .have {
+    width: 100%;
     display: flex;
-    margin: 10px auto;
-  }
-  .have:first-child {
-    padding-top: 15px;
+    justify-content: center;
+    margin-bottom: 15px;
+    input {
+      margin-left: 0;
+    }
+    input:hover {
+      cursor: pointer;
+    }
   }
   select {
     width: 60%;
-    margin: 10px auto;
+    margin-bottom: 15px;
     height: 30px;
     border-radius: 5px;
     border: none;
@@ -761,10 +794,15 @@ const Container = styled.section`
       outline: none;
     }
     @media (min-width: 600px) {
-      height: 40px;
+      height: 35px;
+    }
+    @media (min-width: 800px) {
+      width: 500px;
     }
   }
-
+  select:hover {
+    cursor: pointer;
+  }
   .rating {
     width: 100%;
     padding: 20px;
@@ -783,16 +821,29 @@ const Container = styled.section`
       margin-bottom: 5px;
     }
   }
+  .div-img {
+    padding-top: 140px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    img {
+      height: 20vh;
+      position: fixed;
+      top: 5vh;
+      @media (min-width: 1250px) {
+        height: 22vh;
+      }
+    }
+  }
 
   .date {
-    width: 100%;
+    width: 70%;
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
     input {
       width: 100%;
       height: 35px;
-      border-radius: 5px;
       border: none;
       background-color: #ffffff;
       &:focus {
@@ -800,17 +851,22 @@ const Container = styled.section`
         outline: none;
       }
     }
+    @media (min-width: 800px) {
+      width: 500px;
+    }
     .date-input {
       background-color: #ffffff;
       height: 35px;
-      margin: 10px 10%;
       padding: 0 10px;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      margin-bottom: 15px;
+      border-radius: 5px;
     }
     label {
-      margin: 0 10%;
+      margin-bottom: 5px;
+      font-size: 15px;
     }
   }
 `;

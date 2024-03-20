@@ -74,6 +74,9 @@ const DivHeader = styled.div`
       left: calc(230px + (100vw - 570px));
     }
   }
+  .img:hover {
+    cursor: pointer;
+  }
   .icon-logout {
     position: absolute;
     top: 10px;
@@ -85,5 +88,8 @@ const DivHeader = styled.div`
     @media (min-width: 1250px) {
       left: calc(230px + (100vw - 500px));
     }
+  }
+  .icon-logout:hover {
+    cursor: pointer;
   }
 `;

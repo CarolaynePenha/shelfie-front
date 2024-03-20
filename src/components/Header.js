@@ -197,6 +197,9 @@ const DivHeader = styled.div`
         margin-right: 150px;
       }
     }
+    .profile:hover {
+      cursor: pointer;
+    }
   }
 
   form {
@@ -275,6 +278,9 @@ const DivHeader = styled.div`
       .icon-status {
         width: 32px;
         height: 32px;
+      }
+      .icon-status:hover {
+        cursor: pointer;
       }
     }
     @media (min-width: 1250px) {

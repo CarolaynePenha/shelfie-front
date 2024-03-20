@@ -85,13 +85,14 @@ export default function HeaderSearch({ srcBar, setSrcBar, setBooks }) {
 // ----------------------css
 const DivHeader = styled.div`
   width: 100%;
-  height: 15vh;
+  height: 10vh;
   background-color: #fde8e9;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   position: fixed;
+  border-bottom: 1px solid #5741457a;
   top: 0;
   z-index: 2;
 

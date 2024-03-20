@@ -17,6 +17,7 @@ import Footer from "./Footer";
 import TokenContext from "../context/TokenContext";
 import { logOut } from "../utils";
 import UserContext from "../context/UserContext";
+import Logo from "./../assets/logo.png";
 
 export default function BookInfos() {
   const { id } = useParams();
@@ -66,6 +67,7 @@ export default function BookInfos() {
             color="#574145"
             size={25}
           />
+          <img className="logo" src={Logo} alt="Logo" />
         </div>
 
         <div className="content">
@@ -223,14 +225,31 @@ const Container = styled.section`
   flex-direction: column;
   position: relative;
   .header {
-    height: 19vh;
+    height: 15vh;
     width: 100%;
     background-color: #fde8e9;
     display: flex;
     justify-content: flex-start;
     padding: 10px;
     border-bottom: 1px solid #5741457a;
+    .logo {
+      position: absolute;
+      display: none;
+
+      @media (min-width: 800px) {
+        width: 180px;
+        display: block;
+        left: 25;
+      }
+      @media (min-width: 1250px) {
+        left: 100px;
+      }
+      @media (min-width: 1400px) {
+        left: 150px;
+      }
+    }
   }
+
   .content {
     @media (min-width: 800px) {
       width: calc(100vw - 250px);
@@ -246,6 +265,17 @@ const Container = styled.section`
     @media (min-width: 1400px) {
       left: 290px;
       width: calc(100vw - 510px);
+    }
+    img {
+      height: 20vh;
+      position: fixed;
+      top: 5vh;
+      @media (max-width: 400px) {
+        top: 20px;
+      }
+      @media (min-width: 1250px) {
+        height: 25vh;
+      }
     }
   }
   section {
@@ -268,10 +298,16 @@ const Container = styled.section`
       height: 35px;
     }
   }
+  .icon-status:hover {
+    cursor: pointer;
+  }
   .undo2-icon {
     @media (min-width: 800px) {
       display: none;
     }
+  }
+  .undo2-icon:hover {
+    cursor: pointer;
   }
   .book-infos {
     height: fit-content;
@@ -280,6 +316,9 @@ const Container = styled.section`
     flex-direction: column;
     justify-content: space-evenly;
     align-items: center;
+    @media (max-width: 600px) {
+      margin-top: 40px;
+    }
     strong {
       font-weight: 600;
       padding: 10px;
@@ -305,17 +344,6 @@ const Container = styled.section`
     background-color: #ffffff;
     strong {
       font-weight: 600;
-    }
-  }
-  img {
-    height: 20vh;
-    position: fixed;
-    top: 5vh;
-    @media (max-width: 400px) {
-      top: 20px;
-    }
-    @media (min-width: 1250px) {
-      height: 25vh;
     }
   }
   .div-img {
