@@ -127,6 +127,9 @@ export default function Shelf() {
             shelfBooks.map((shelfBook, index) => {
               return <Bookshelf key={index} shelfBook={shelfBook} />;
             })}
+          {shelfBooks.length === 0 && (
+            <p>Você não adicionou nenhum livro na estante ainda.</p>
+          )}
         </div>
       </div>
       <Footer />

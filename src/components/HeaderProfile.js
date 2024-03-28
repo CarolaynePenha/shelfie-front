@@ -14,7 +14,7 @@ export default function HeaderProfile() {
   const { setToken } = useContext(TokenContext);
   return (
     <DivHeader>
-      <img className="logo" src={Logo} />
+      <img className="logo" src={Logo} alt="Logo" />
       <LogOut
         onClick={() => logOut(setToken, setUser, navigate)}
         className="icon-logout"
@@ -23,7 +23,7 @@ export default function HeaderProfile() {
         fillOpacity={0.5}
         size={25}
       />
-      <img className="img" src={user.image} />
+      <img className="img" src={user.image} alt="Imagem do Usuario" />
     </DivHeader>
   );
 }

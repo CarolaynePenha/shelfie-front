@@ -80,6 +80,7 @@ export default function SignIn() {
           <input
             disabled={buttonState}
             required
+            id="email"
             placeholder="e-mail"
             value={email}
             onChange={(e) =>

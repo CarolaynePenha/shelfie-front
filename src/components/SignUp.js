@@ -128,7 +128,7 @@ export default function SignUp() {
             type="text"
             disabled={buttonState}
             required
-            placeholder="name"
+            placeholder="nome"
             value={name}
             onChange={(e) =>
               setInfosSignUp({ ...infosSignUp, name: e.target.value })

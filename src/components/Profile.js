@@ -98,7 +98,7 @@ export default function Profile() {
           </div>
           <div className="metric">
             <p>
-              <strong>{metrics.wishBooks}</strong> livros que você quer ler{" "}
+              <strong>{metrics.wishBooks}</strong> livros que você quer ler
             </p>
             <BookDashed color="#175676" size={sizeIcon} />
           </div>

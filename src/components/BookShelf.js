@@ -5,7 +5,7 @@ export default function Bookshelf({ shelfBook }) {
   const navigate = useNavigate();
   return shelfBook?.book ? (
     <DivShelfBook onClick={() => navigate(`/bookInfos/${shelfBook.bookId}`)}>
-      <img src={shelfBook.book.bookImage} alt="Capa do livro" />
+      <img src={shelfBook.book.bookImage} alt={shelfBook.book.title} />
     </DivShelfBook>
   ) : (
     ""
