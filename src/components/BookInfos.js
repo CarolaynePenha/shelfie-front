@@ -291,8 +291,12 @@ const Container = styled.section`
       height: 20vh;
       position: absolute;
       top: 5vh;
+
       @media (max-width: 400px) {
         top: 20px;
+      }
+      @media (min-width: 800px) {
+        top: -100;
       }
       @media (min-width: 1250px) {
         height: 25vh;

@@ -130,5 +130,8 @@ const Container = styled.section`
     img {
       height: 15vh;
     }
+    img:hover {
+      cursor: pointer;
+    }
   }
 `;
