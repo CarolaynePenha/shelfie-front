@@ -15,14 +15,15 @@ import { Tooltip } from "react-tooltip";
 
 import Footer from "./Footer";
 import TokenContext from "../context/TokenContext";
-import { logOut } from "../utils";
+import { handleError } from "../utils";
 import UserContext from "../context/UserContext";
 import Logo from "./../assets/logo.png";
+import Loading from "./LoadingBall";
 
 export default function BookInfos() {
   const { id } = useParams();
   const { token, setToken } = useContext(TokenContext);
-  const [book, setBook] = useState("");
+  const [book, setBook] = useState(null);
   const navigate = useNavigate();
   const { setUser } = useContext(UserContext);
   const sizeIcon = 30;
@@ -42,16 +43,7 @@ export default function BookInfos() {
         setBook(data);
       } catch (err) {
         console.log(err.response);
-        if (err.response.status === 401) {
-          alert("Usuário inválido, faça login novamente");
-          logOut(setToken, setUser, navigate);
-        }
-        if (err.response.status === 404) {
-          alert("Livro não encontrado");
-          navigate("/shelf");
-        } else {
-          alert("Houve um erro ao realizar sua busca!");
-        }
+        handleError(err, setToken, setUser, navigate);
       }
     }
     getfBookById();
@@ -67,150 +59,171 @@ export default function BookInfos() {
             color="#574145"
             size={25}
           />
-          <img className="logo" src={Logo} alt="Logo" />
+          <img
+            className="logo"
+            src={Logo}
+            alt="Logo"
+            onClick={() => navigate("/shelf")}
+          />
         </div>
 
-        <div className="content">
-          <div className="div-img">
-            <img src={book.bookImage} alt="capa do livro" />
+        {book === null ? (
+          <div className="loading">
+            <Loading />
           </div>
-          {book.status === "done" ? (
-            <>
-              <Tooltip id="done-books" />
-              <BookOpenCheck
-                data-tooltip-id="done-books"
-                data-tooltip-content="Lido"
-                className="icon-status"
-                onClick={() => navigate(`/addBook/${book.id}/${existingBook}`)}
-                color="#00693e"
-                fill="#00693e"
-                fillOpacity={0.5}
-                size={sizeIcon}
-              />
-            </>
-          ) : book.status === "reading" ? (
-            <>
-              <Tooltip id="reading-books" />
-              <BookOpen
-                data-tooltip-id="reading-books"
-                data-tooltip-content="Lendo"
-                className="icon-status"
-                onClick={() => navigate(`/addBook/${book.id}/${existingBook}`)}
-                color="#f3b93f"
-                fill="#f3b93f"
-                fillOpacity={0.5}
-                size={sizeIcon}
-              />
-            </>
-          ) : book.status === "wish" ? (
-            <>
-              <Tooltip id="wish-books" />
-              <BookDashed
-                data-tooltip-id="wish-books"
-                data-tooltip-content="Quero ler"
-                className="icon-status"
-                onClick={() => navigate(`/addBook/${book.id}/${existingBook}`)}
-                color="#175676"
-                size={sizeIcon}
-              />
-            </>
-          ) : book.status === "abandoned" ? (
-            <>
-              <Tooltip id="abandoned-books" />
-              <BookDown
-                data-tooltip-id="abandoned-books"
-                data-tooltip-content="Abandonado"
-                className="icon-status"
-                onClick={() => navigate(`/addBook/${book.id}/${existingBook}`)}
-                color="#000000"
-                fill="#000000"
-                fillOpacity={0.5}
-                size={sizeIcon}
-              />
-            </>
-          ) : book.status === "rereading" ? (
-            <>
-              <Tooltip id="rereading-books" />
-              <BookOpen
-                data-tooltip-id="rereading-books"
-                data-tooltip-content="Relendo"
-                className="icon-status"
-                onClick={() => navigate(`/addBook/${book.id}/${existingBook}`)}
-                color="#df6d2f"
-                fill="#df6d2f"
-                fillOpacity={0.5}
-                size={25}
-              />
-            </>
-          ) : (
-            <>
-              <Tooltip id="add-books" />
-              <Plus
-                data-tooltip-id="add-books"
-                data-tooltip-content="Adicionar"
-                className="icon-status"
-                onClick={() => navigate(`/addBook/${book.id}/${newBook}`)}
-                color="#574145"
-                size={sizeIcon}
-              />
-            </>
-          )}
-          <div className="book-infos">
-            <strong>{book.title}</strong>
-            <p>{book?.name}</p>
-            <small> {book.metricDone} Avaliações </small>
-          </div>
-          <div className="reading-data">
-            {book.metricDone >= 2 ? (
-              <p>
-                <strong>{book.metricDone}</strong> Leram{" "}
-              </p>
-            ) : (
-              <p>
-                <strong>{book.metricDone}</strong> Leu{" "}
-              </p>
-            )}
-            {book.metricWish >= 2 ? (
-              <p>
-                <strong>{book.metricWish}</strong> Querem ler
-              </p>
-            ) : (
-              <p>
-                <strong>{book.metricWish}</strong> Quer ler
-              </p>
-            )}
-            {book.metricReading >= 2 ? (
-              <p>
-                <strong>{book.metricReading}</strong> Lendo
-              </p>
-            ) : (
-              <p>
-                <strong>{book.metricReading}</strong> Lendo
-              </p>
-            )}
-          </div>
-
-          <section className="rating">
-            <p>Avaliações</p>
-            {book.totalstars && (
-              <div className="stars">
-                <strong> {book.totalstars}</strong>
-                <Rating
-                  fillColor="#574145"
-                  allowFraction={true}
-                  size={40}
-                  readonly={true}
-                  initialValue={book.totalstars}
+        ) : (
+          <div className="content">
+            <div className="div-img">
+              <img src={book.bookImage} alt="capa do livro" />
+            </div>
+            {book.status === "done" ? (
+              <>
+                <Tooltip id="done-books" />
+                <BookOpenCheck
+                  data-tooltip-id="done-books"
+                  data-tooltip-content="Lido"
+                  className="icon-status"
+                  onClick={() =>
+                    navigate(`/addBook/${book.id}/${existingBook}`)
+                  }
+                  color="#00693e"
+                  fill="#00693e"
+                  fillOpacity={0.5}
+                  size={sizeIcon}
                 />
-              </div>
+              </>
+            ) : book.status === "reading" ? (
+              <>
+                <Tooltip id="reading-books" />
+                <BookOpen
+                  data-tooltip-id="reading-books"
+                  data-tooltip-content="Lendo"
+                  className="icon-status"
+                  onClick={() =>
+                    navigate(`/addBook/${book.id}/${existingBook}`)
+                  }
+                  color="#f3b93f"
+                  fill="#f3b93f"
+                  fillOpacity={0.5}
+                  size={sizeIcon}
+                />
+              </>
+            ) : book.status === "wish" ? (
+              <>
+                <Tooltip id="wish-books" />
+                <BookDashed
+                  data-tooltip-id="wish-books"
+                  data-tooltip-content="Quero ler"
+                  className="icon-status"
+                  onClick={() =>
+                    navigate(`/addBook/${book.id}/${existingBook}`)
+                  }
+                  color="#175676"
+                  size={sizeIcon}
+                />
+              </>
+            ) : book.status === "abandoned" ? (
+              <>
+                <Tooltip id="abandoned-books" />
+                <BookDown
+                  data-tooltip-id="abandoned-books"
+                  data-tooltip-content="Abandonado"
+                  className="icon-status"
+                  onClick={() =>
+                    navigate(`/addBook/${book.id}/${existingBook}`)
+                  }
+                  color="#000000"
+                  fill="#000000"
+                  fillOpacity={0.5}
+                  size={sizeIcon}
+                />
+              </>
+            ) : book.status === "rereading" ? (
+              <>
+                <Tooltip id="rereading-books" />
+                <BookOpen
+                  data-tooltip-id="rereading-books"
+                  data-tooltip-content="Relendo"
+                  className="icon-status"
+                  onClick={() =>
+                    navigate(`/addBook/${book.id}/${existingBook}`)
+                  }
+                  color="#df6d2f"
+                  fill="#df6d2f"
+                  fillOpacity={0.5}
+                  size={25}
+                />
+              </>
+            ) : (
+              <>
+                <Tooltip id="add-books" />
+                <Plus
+                  data-tooltip-id="add-books"
+                  data-tooltip-content="Adicionar"
+                  className="icon-status"
+                  onClick={() => navigate(`/addBook/${book.id}/${newBook}`)}
+                  color="#574145"
+                  size={sizeIcon}
+                />
+              </>
             )}
-            {!book.totalstars && (
-              <div className="stars">
-                <p> Livro sem avaliações. </p>
-              </div>
-            )}
-          </section>
-        </div>
+            <div className="book-infos">
+              <strong>{book.title}</strong>
+              <p>{book?.name}</p>
+              <small> {book.metricDone} Avaliações </small>
+            </div>
+            <div className="reading-data">
+              {book.metricDone >= 2 ? (
+                <p>
+                  <strong>{book.metricDone}</strong> Leram{" "}
+                </p>
+              ) : (
+                <p>
+                  <strong>{book.metricDone}</strong> Leu{" "}
+                </p>
+              )}
+              {book.metricWish >= 2 ? (
+                <p>
+                  <strong>{book.metricWish}</strong> Querem ler
+                </p>
+              ) : (
+                <p>
+                  <strong>{book.metricWish}</strong> Quer ler
+                </p>
+              )}
+              {book.metricReading >= 2 ? (
+                <p>
+                  <strong>{book.metricReading}</strong> Lendo
+                </p>
+              ) : (
+                <p>
+                  <strong>{book.metricReading}</strong> Lendo
+                </p>
+              )}
+            </div>
+
+            <section className="rating">
+              <p>Avaliações</p>
+              {book.totalstars && (
+                <div className="stars">
+                  <strong> {book.totalstars.toFixed(1)}</strong>
+                  <Rating
+                    fillColor="#574145"
+                    allowFraction={true}
+                    size={40}
+                    readonly={true}
+                    initialValue={book.totalstars}
+                  />
+                </div>
+              )}
+              {!book.totalstars && (
+                <div className="stars">
+                  <p> Livro sem avaliações. </p>
+                </div>
+              )}
+            </section>
+          </div>
+        )}
       </Container>
       <Footer />
     </>
@@ -224,6 +237,14 @@ const Container = styled.section`
   display: flex;
   flex-direction: column;
   position: relative;
+  .loading {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    width: 100%;
+    height: 100vh;
+    margin-top: 30vh;
+  }
   .header {
     height: 15vh;
     width: 100%;
@@ -268,7 +289,7 @@ const Container = styled.section`
     }
     img {
       height: 20vh;
-      position: fixed;
+      position: absolute;
       top: 5vh;
       @media (max-width: 400px) {
         top: 20px;

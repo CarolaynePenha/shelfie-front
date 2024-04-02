@@ -15,13 +15,14 @@ import HeaderProfile from "./HeaderProfile";
 import TokenContext from "../context/TokenContext";
 import UserContext from "../context/UserContext";
 import { useNavigate } from "react-router-dom";
-import { logOut } from "../utils";
+import { handleError } from "../utils";
+import Loading from "./LoadingBall";
 
 export default function Profile() {
   const sizeIcon = 25;
   const { token, setToken } = useContext(TokenContext);
   const { setUser } = useContext(UserContext);
-  const [metrics, setMetrics] = useState("");
+  const [metrics, setMetrics] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -37,12 +38,7 @@ export default function Profile() {
         setMetrics(data);
       } catch (err) {
         console.log(err.response);
-        if (err.response.status === 401) {
-          alert("Usuário inválido, faça login novamente");
-          logOut(setToken, setUser, navigate);
-        } else {
-          alert("Houve um erro ao realizar sua busca!");
-        }
+        handleError(err, setToken, setUser, navigate);
       }
     }
     getMetrics();
@@ -51,69 +47,75 @@ export default function Profile() {
     <>
       <HeaderProfile />
       <Container>
-        <div className="metrics">
-          <div className="metric">
-            <p>
-              <strong>{metrics.doneBooks}</strong> livros lidos
-            </p>
-            <BookOpenCheck
-              color="#00693e"
-              fill="#00693e"
-              fillOpacity={0.5}
-              size={sizeIcon}
-            />
+        {metrics === null ? (
+          <div className="loading">
+            <Loading />
           </div>
-          <div className="metric">
-            <p>
-              <strong>{metrics.totalBooks}</strong> livros na estante
-            </p>
-            <BookMarked
-              color="#574145"
-              fill="#574145"
-              fillOpacity={0.5}
-              size={sizeIcon}
-            />
+        ) : (
+          <div className="metrics">
+            <div className="metric">
+              <p>
+                <strong>{metrics.doneBooks}</strong> livros lidos
+              </p>
+              <BookOpenCheck
+                color="#00693e"
+                fill="#00693e"
+                fillOpacity={0.5}
+                size={sizeIcon}
+              />
+            </div>
+            <div className="metric">
+              <p>
+                <strong>{metrics.totalBooks}</strong> livros na estante
+              </p>
+              <BookMarked
+                color="#574145"
+                fill="#574145"
+                fillOpacity={0.5}
+                size={sizeIcon}
+              />
+            </div>
+            <div className="metric">
+              <p>
+                <strong> {metrics.totalPages}</strong> páginas lidas
+              </p>
+              <Layers3
+                color="#00693e"
+                fill="#00693e"
+                fillOpacity={0.5}
+                size={sizeIcon}
+              />
+            </div>
+            <div className="metric">
+              <p>
+                <strong>{metrics.abandonedBooks}</strong> livros abandonados
+              </p>
+              <BookDown
+                color="#000000"
+                fill="#000000"
+                fillOpacity={0.5}
+                size={sizeIcon}
+              />
+            </div>
+            <div className="metric">
+              <p>
+                <strong>{metrics.wishBooks}</strong> livros que você quer ler
+              </p>
+              <BookDashed color="#175676" size={sizeIcon} />
+            </div>
+            <div className="metric">
+              <p>
+                <strong>{metrics.favoriteBooks}</strong> livros favoritados
+              </p>
+              <BookHeart
+                color="#850606"
+                fill="#850606"
+                fillOpacity={0.5}
+                size={sizeIcon}
+              />
+            </div>
           </div>
-          <div className="metric">
-            <p>
-              <strong> {metrics.totalPages}</strong> páginas lidas
-            </p>
-            <Layers3
-              color="#00693e"
-              fill="#00693e"
-              fillOpacity={0.5}
-              size={sizeIcon}
-            />
-          </div>
-          <div className="metric">
-            <p>
-              <strong>{metrics.abandonedBooks}</strong> livros abandonados
-            </p>
-            <BookDown
-              color="#000000"
-              fill="#000000"
-              fillOpacity={0.5}
-              size={sizeIcon}
-            />
-          </div>
-          <div className="metric">
-            <p>
-              <strong>{metrics.wishBooks}</strong> livros que você quer ler
-            </p>
-            <BookDashed color="#175676" size={sizeIcon} />
-          </div>
-          <div className="metric">
-            <p>
-              <strong>{metrics.favoriteBooks}</strong> livros favoritados
-            </p>
-            <BookHeart
-              color="#850606"
-              fill="#850606"
-              fillOpacity={0.5}
-              size={sizeIcon}
-            />
-          </div>
-        </div>
+        )}
       </Container>
       <Footer />
     </>
@@ -128,6 +130,14 @@ const Container = styled.section`
   flex-direction: column;
   align-items: flex-start;
   position: relative;
+  .loading {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    width: 100%;
+    height: 100vh;
+    margin-top: 40vh;
+  }
   @media (min-width: 800px) {
     width: calc(100vw - 250px);
     position: fixed;

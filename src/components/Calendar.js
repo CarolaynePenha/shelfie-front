@@ -70,7 +70,7 @@ const DivCalendar = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 75%;
+    width: 100%;
 
     button {
       height: 30px;

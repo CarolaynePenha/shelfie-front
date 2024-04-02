@@ -24,7 +24,12 @@ export default function Header({
   return (
     <DivHeader>
       <div className="top-shelf">
-        <img className="logo" src={Logo} alt="Logo" />
+        <img
+          className="logo"
+          src={Logo}
+          alt="Logo"
+          onClick={() => navigate("/shelf")}
+        />
         <img
           className="profile"
           onClick={() => navigate("/profile")}
@@ -153,6 +158,9 @@ const DivHeader = styled.div`
   z-index: 2;
   @media (min-width: 800px) {
     height: 10vh;
+  }
+  @media (max-height: 750px) {
+    height: 24vh;
   }
   p {
     font-size: 18px;

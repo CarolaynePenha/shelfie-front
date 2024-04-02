@@ -4,16 +4,17 @@ import axios from "axios";
 import styled from "styled-components";
 
 import Bookshelf from "./BookShelf";
-import { logOut } from "../utils";
+import { handleError, logOut } from "../utils";
 import UserContext from "../context/UserContext";
 import TokenContext from "../context/TokenContext";
 import Header from "./Header";
 import Footer from "./Footer";
 import CalendarToYear from "./CalendarToYear";
 import Category from "./Category";
+import Loading from "./LoadingBall";
 
 export default function Shelf() {
-  const [shelfBooks, setShelfBooks] = useState("");
+  const [shelfBooks, setShelfBooks] = useState(null);
 
   const { token, setToken } = useContext(TokenContext);
   const [filter, setFilter] = useState("");
@@ -36,12 +37,7 @@ export default function Shelf() {
       } catch (err) {
         console.log("err: ", err);
         console.log(err.response);
-        if (err.response?.status === 401) {
-          alert("Usuário inválido, faça login novamente");
-          logOut(setToken, setUser, navigate);
-        } else {
-          alert("Houve um erro na realizar sua busca!");
-        }
+        handleError(err, setToken, setUser, navigate);
       }
     }
     getShelfBooks();
@@ -87,51 +83,57 @@ export default function Shelf() {
         setGetShelfBooks={setGetShelfBooks}
         getShelfBooks={getShelfBooks}
       />
-      <div className="content">
-        <div className="shelf-top">
-          <select
-            required
-            value={filter}
-            onChange={(e) => {
-              setFilter(e.target.value);
-            }}
-            onClick={() => window.scrollTo(0, 500)}
-          >
-            {filterArr.map((value, index) => {
-              return (
-                <option key={index} value={value}>
-                  {value}
-                </option>
-              );
-            })}
-          </select>
-          <p>Minha Estante</p>
+      {shelfBooks === null ? (
+        <div className="loading">
+          <Loading />
         </div>
-        {filter === "ano" && (
-          <CalendarToYear
-            setFilter={setFilter}
-            search={search}
-            setSrcBar={setSrcBar}
-          />
-        )}
-        {filter === "categoria" && (
-          <Category
-            search={search}
-            setFilter={setFilter}
-            setSrcBar={setSrcBar}
-          />
-        )}
-
-        <div className="shelf">
-          {shelfBooks?.length >= 1 &&
-            shelfBooks.map((shelfBook, index) => {
-              return <Bookshelf key={index} shelfBook={shelfBook} />;
-            })}
-          {shelfBooks.length === 0 && (
-            <p>Você não adicionou nenhum livro na estante ainda.</p>
+      ) : (
+        <div className="content">
+          <div className="shelf-top">
+            <select
+              required
+              value={filter}
+              onChange={(e) => {
+                setFilter(e.target.value);
+              }}
+              onClick={() => window.scrollTo(0, 500)}
+            >
+              {filterArr.map((value, index) => {
+                return (
+                  <option key={index} value={value}>
+                    {value}
+                  </option>
+                );
+              })}
+            </select>
+            <p>Minha Estante</p>
+          </div>
+          {filter === "ano" && (
+            <CalendarToYear
+              setFilter={setFilter}
+              search={search}
+              setSrcBar={setSrcBar}
+            />
           )}
+          {filter === "categoria" && (
+            <Category
+              search={search}
+              setFilter={setFilter}
+              setSrcBar={setSrcBar}
+            />
+          )}
+
+          <div className="shelf">
+            {shelfBooks?.length >= 1 &&
+              shelfBooks.map((shelfBook, index) => {
+                return <Bookshelf key={index} shelfBook={shelfBook} />;
+              })}
+            {shelfBooks.length === 0 && (
+              <p>Você não adicionou nenhum livro na estante ainda.</p>
+            )}
+          </div>
         </div>
-      </div>
+      )}
       <Footer />
     </Container>
   );
@@ -140,6 +142,14 @@ export default function Shelf() {
 // ----------------------css
 const Container = styled.div`
   width: 100%;
+  .loading {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    width: 100%;
+    height: 100vh;
+    margin-top: 50vh;
+  }
   .content {
     width: 100%;
     height: fit-content;
@@ -199,6 +209,11 @@ const Container = styled.div`
         width: calc(100vw - 510px);
         left: 280px;
       }
+    }
+  }
+  @media (max-height: 750px) {
+    select {
+      margin-top: 25vh;
     }
   }
 `;

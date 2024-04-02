@@ -14,7 +14,12 @@ export default function HeaderProfile() {
   const { setToken } = useContext(TokenContext);
   return (
     <DivHeader>
-      <img className="logo" src={Logo} alt="Logo" />
+      <img
+        className="logo"
+        src={Logo}
+        alt="Logo"
+        onClick={() => navigate("/shelf")}
+      />
       <LogOut
         onClick={() => logOut(setToken, setUser, navigate)}
         className="icon-logout"

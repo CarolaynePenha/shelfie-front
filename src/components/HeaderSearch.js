@@ -66,7 +66,7 @@ export default function HeaderSearch({ srcBar, setSrcBar, setBooks }) {
   return (
     <DivHeader>
       <div className="src">
-        <img src={Logo} alt="Logo" />
+        <img src={Logo} alt="Logo" onClick={() => navigate("/shelf")} />
         <DebounceInput
           minLength={3}
           className="debounce-input"

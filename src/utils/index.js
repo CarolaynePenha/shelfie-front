@@ -17,3 +17,16 @@ export function convertToISOString(date) {
   const dateObject = new Date(date).toISOString();
   return dateObject;
 }
+
+export function handleError(err, setToken, setUser, navigate) {
+  if (err.response.status === 401) {
+    alert("Usuário inválido, faça login novamente");
+    logOut(setToken, setUser, navigate);
+  }
+  if (err.response.status === 404) {
+    alert("Livro não encontrado");
+    navigate("/shelf");
+  } else {
+    alert("Houve um erro ao realizar sua busca!");
+  }
+}

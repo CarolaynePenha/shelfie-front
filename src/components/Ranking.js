@@ -6,9 +6,10 @@ import Footer from "./Footer";
 import HeaderProfile from "./HeaderProfile";
 import TokenContext from "../context/TokenContext";
 import { Rating } from "react-simple-star-rating";
-import { logOut } from "../utils";
+import { handleError } from "../utils";
 import UserContext from "../context/UserContext";
 import { useNavigate } from "react-router-dom";
+import Loading from "./LoadingBall";
 
 export default function Ranking() {
   const { token, setToken } = useContext(TokenContext);
@@ -30,12 +31,7 @@ export default function Ranking() {
       } catch (err) {
         console.log("err: ", err);
         console.log(err.response);
-        if (err.response?.status === 401) {
-          alert("Usuário inválido, faça login novamente");
-          logOut(setToken, setUser, navigate);
-        } else {
-          alert("Houve um erro na realizar sua busca!");
-        }
+        handleError(err, setToken, setUser, navigate);
       }
     }
     getBookById();
@@ -45,7 +41,7 @@ export default function Ranking() {
     <>
       <HeaderProfile />
       <Container>
-        {ranking && (
+        {ranking?.length >= 1 ? (
           <>
             <p>
               <strong>Ranking</strong>
@@ -53,7 +49,11 @@ export default function Ranking() {
             {ranking.map((rank) => {
               return (
                 <section>
-                  <img src={rank.bookImage} alt="capa do livro" />
+                  <img
+                    src={rank.bookImage}
+                    alt="capa do livro"
+                    onClick={() => navigate(`/bookInfos/${rank.id}`)}
+                  />
                   <div className="rating">
                     <Rating
                       fillColor="#574145"
@@ -68,8 +68,13 @@ export default function Ranking() {
               );
             })}
           </>
+        ) : ranking?.length === 0 ? (
+          <p>Nenhum livro avaliado ainda.</p>
+        ) : (
+          <div className="loading">
+            <Loading />
+          </div>
         )}
-        {!ranking || (!ranking.length && <p>Nenhum livro avaliado ainda.</p>)}
       </Container>
       <Footer />
     </>
@@ -85,6 +90,14 @@ const Container = styled.section`
   flex-direction: column;
   align-items: flex-start;
   position: relative;
+  .loading {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    width: 100%;
+    height: 100vh;
+    margin-top: 25vh;
+  }
   @media (min-width: 800px) {
     width: calc(100vw - 250px);
     position: fixed;
