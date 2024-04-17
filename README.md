@@ -5,7 +5,7 @@
 </div>
 </div>
 <div align="center">
-    <a href="shelfie-front.vercel.app" target="_blank">Shelfie's Webpage<a/>
+    <a href="https://shelfie-front.vercel.app" target="_blank">Shelfie's Webpage<a/>
 </div>
 
 # About
