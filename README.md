@@ -1,7 +1,11 @@
 <br />
 <div align="center">
-    <img src="./.github/logo.png" alt="Shelfie Logo" width="180">
-    <h3 align="center">Tests Repo</h3>
+    <img src="./.github/logo.png" alt="Shelfie Logo" width="350">
+    <h3 align="center">Literary assistant</h3>
+</div>
+</div>
+<div align="center">
+    <a href="shelfie-front.vercel.app" target="_blank">Shelfie's Webpage<a/>
 </div>
 
 # About
