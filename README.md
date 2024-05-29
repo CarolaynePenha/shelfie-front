@@ -16,6 +16,10 @@
 see the ratings of the books you want to read and be informed with which books are trending and which are releases,
 besides to monitoring your metrics of reading.
 
+<div align="center">
+    <img src="./.github/shelfie.gif" alt="Shelfie Gif">
+</div>
+
 ## Technologies
 
 These are the main tools, frameworks and languages that were used in this project:<br>
